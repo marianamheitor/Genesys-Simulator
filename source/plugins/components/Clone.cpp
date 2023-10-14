@@ -16,6 +16,7 @@
 #include "../../kernel/simulator/Attribute.h"
 #include "../../kernel/simulator/Model.h"
 #include "../../kernel/simulator/Simulator.h"
+#include "../../kernel/simulator/SimulationControlAndResponse.h"
 #include "../../kernel/simulator/PluginManager.h"
 
 #ifdef PLUGINCONNECT_DYNAMIC
@@ -30,6 +31,14 @@ ModelDataDefinition* Clone::NewInstance(Model* model, std::string name) {
 }
 
 Clone::Clone(Model* model, std::string name) : ModelComponent(model, Util::TypeOf<Clone>(), name) {
+	SimulationControlString* propNumClone = new SimulationControlString(
+									std::bind(&Clone::getNumClonesExpression, this), std::bind(&Clone::setNumClonesExpression, this, std::placeholders::_1),
+									Util::TypeOf<Clone>(), getName(), "NumClonesExpression", "");
+
+	_parentModel->getControls()->insert(propNumClone);
+
+	// setting properties
+	_addProperty(propNumClone);
 }
 
 std::string Clone::show() {
