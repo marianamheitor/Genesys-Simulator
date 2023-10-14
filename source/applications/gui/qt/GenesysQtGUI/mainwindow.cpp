@@ -49,6 +49,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 		_insertPluginUI(simulator->getPlugins()->getAtRank(i));
 	}
 
+	propertyGenesys = new PropertyEditorGenesys();
+
 	//_insertFakePlugins(); // todo hate this
 
 	//
@@ -110,6 +112,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     // ModelGraphic
 	ui->graphicsView->setParentWidget(ui->centralwidget);
 	ui->graphicsView->setSimulator(simulator);
+	ui->graphicsView->setPropertyEditor(propertyGenesys);
 	_zoomValue = ui->horizontalSlider_ZoomGraphical->maximum() / 2;
     //
     // set current tabs
@@ -842,6 +845,7 @@ void MainWindow::_actualizeModelCppCode() {
 		code->insert({"1begin", text});
 
 		text = _addCppCodeLine("#include \"kernel/simulator/Simulator.h\"");
+		text = _addCppCodeLine("#include \"kernel/simulator/PropertyGenesys.h\"");
 		List<std::string>* included = new List<std::string>();
 		for (ModelComponent* comp : *m->getComponents()->getAllComponents()) {
 			name = comp->getClassname();
@@ -866,8 +870,9 @@ void MainWindow::_actualizeModelCppCode() {
 
 		text = _addCppCodeLine("\nint main(int argc, char** argv) {");
 		tabs++;
-		text += _addCppCodeLine("// Create simulator, a model and get acess to plugins", tabs);
+		text += _addCppCodeLine("// Create simulator, a property editor, a model and get acess to plugins", tabs);
 		text += _addCppCodeLine("Simulator* genesys = new Simulator();", tabs);
+		text += _addCppCodeLine("PropertyEditorGenesys* propertyEditor = new PropertyEditorGenesys();", tabs);
 		text += _addCppCodeLine("Model* model = genesys->getModels()->newModel();", tabs);
 		text += _addCppCodeLine("PluginManager* plugins = genesys->getPlugins();", tabs);
 		text += _addCppCodeLine("model->getTracer()->setTraceLevel(TraceManager::TraceLevel::L9_mostDetailed);", tabs);
@@ -1220,7 +1225,7 @@ void MainWindow::sceneSelectionChanged() {
 			// https://doc.qt.io/archives/qq/qq18-propertybrowser.html
 			// http://qt.nokia.com/products/appdev/add-on-products/catalog/4/Widgets/qtpropertybrowser/
 			// // ui->treeViewPropertyEditor->setModelBlock(gmc->getComponent());
-			ui->treeViewPropertyEditor->setActiveObject(gmc, gmc->getComponent());
+			ui->treeViewPropertyEditor->setActiveObject(gmc, gmc->getComponent(), propertyGenesys);
 			return;
         } else { // nothing selected
             ui->treeViewPropertyEditor->clear();
@@ -2154,4 +2159,3 @@ void MainWindow::on_actionSimulatorsPluginManager_triggered()
 	DialogPluginManager* dialog = new DialogPluginManager(this);
 	dialog->show();
 }
-
