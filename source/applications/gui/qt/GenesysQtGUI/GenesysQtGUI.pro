@@ -44,6 +44,7 @@ SOURCES += \
 	../../../../kernel/simulator/PluginConnectorDummyImpl1.cpp \
 	../../../../kernel/simulator/PluginInformation.cpp \
 	../../../../kernel/simulator/PluginManager.cpp \
+	../../../../kernel/simulator/PropertyGenesys.cpp \
 	../../../../kernel/simulator/SimulationExperiment.cpp \
 	../../../../kernel/simulator/SimulationReporterDefaultImpl1.cpp \
 	../../../../kernel/simulator/SimulationScenario.cpp \
