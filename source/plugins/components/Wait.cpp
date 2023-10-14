@@ -14,6 +14,7 @@
 #include "Wait.h"
 #include "../../kernel/simulator/Model.h"
 #include "../../kernel/simulator/Simulator.h"
+#include "../../kernel/simulator/SimulationControlAndResponse.h"
 #include "../../kernel/simulator/PluginManager.h"
 #include "../../plugins/data/Queue.h"
 
@@ -31,6 +32,21 @@ ModelDataDefinition* Wait::NewInstance(Model* model, std::string name) {
 }
 
 Wait::Wait(Model* model, std::string name) : ModelComponent(model, Util::TypeOf<Wait>(), name) {
+	SimulationControlString* propCondition = new SimulationControlString(
+									std::bind(&Wait::getCondition, this), std::bind(&Wait::setCondition, this, std::placeholders::_1),
+									Util::TypeOf<Wait>(), getName(), "Condition", "");
+	SimulationControlString* propExpression = new SimulationControlString(
+									std::bind(&Wait::getlimitExpression, this), std::bind(&Wait::setLimitExpression, this, std::placeholders::_1),
+									Util::TypeOf<Wait>(), getName(), "LimitExpression", "");
+
+	// _parentModel->getControls()->insert();
+	_parentModel->getControls()->insert(propCondition);
+	_parentModel->getControls()->insert(propExpression);
+
+	// setting properties
+	// _addProperty();
+	_addProperty(propCondition);
+	_addProperty(propExpression);
 }
 
 // public
@@ -196,4 +212,3 @@ void Wait::_handlerForAfterProcessEventEvent(SimulationEvent* event) {
 
 	}
 }
-
