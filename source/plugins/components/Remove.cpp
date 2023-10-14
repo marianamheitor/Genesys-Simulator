@@ -14,6 +14,7 @@
 #include "Remove.h"
 #include "../../kernel/simulator/Model.h"
 #include "../../kernel/simulator/Simulator.h"
+#include "../../kernel/simulator/SimulationControlAndResponse.h"
 #include "../../plugins/data/EntityGroup.h"
 #include "../../plugins/data/Queue.h"
 
@@ -61,6 +62,22 @@ ModelDataDefinition* Remove::getRemoveFrom() const {
 }
 
 Remove::Remove(Model* model, std::string name) : ModelComponent(model, Util::TypeOf<Remove>(), name) {
+	SimulationControlString* propRemoveStart = new SimulationControlString(
+									std::bind(&Remove::getRemoveStartRank, this), std::bind(&Remove::setRemoveStartRank,  this, std::placeholders::_1),
+									Util::TypeOf<Remove>(), getName(), "RemoveStartRank", "");
+	SimulationControlString* propRemoveEnd = new SimulationControlString(
+									std::bind(&Remove::getRemoveEndRank, this), std::bind(&Remove::setRemoveEndRank, this, std::placeholders::_1),
+									Util::TypeOf<Remove>(), getName(), "RemoveEndRank", "");
+	
+	// _parentModel->getControls()->insert();
+	// _parentModel->getControls()->insert();
+	_parentModel->getControls()->insert(propRemoveStart);
+	_parentModel->getControls()->insert(propRemoveEnd);
+
+	// _addProperty();
+	// _addProperty();
+	_addProperty(propRemoveStart);
+	_addProperty(propRemoveEnd);
 }
 
 std::string Remove::show() {
@@ -164,5 +181,3 @@ PluginInformation* Remove::GetPluginInformation() {
 	// ...
 	return info;
 }
-
-
