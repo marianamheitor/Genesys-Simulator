@@ -278,5 +278,34 @@ private:
 
 typedef SimulationControl PropertyBase;
 
+// -----------------------------------------------------------
+
+typedef std::function<Util::AllocationType()> GetterAllocationType;
+typedef std::function<void(Util::AllocationType)> SetterAllocationType;
+class SimulationControlAllocationType: public SimulationControl {
+public:
+//	SimulationControlAllocationType(GetterAllocationType getter, std::string className, std::string elementName, std::string propertyName, std::string whatsThis="") : SimulationControl(className, elementName, propertyName, whatsThis) {
+//		SimulationControlAllocationType(getter, nullptr, className, propertyName, whatsThis);
+//	}
+	SimulationControlAllocationType(GetterAllocationType getter, SetterAllocationType setter, std::string className, std::string elementName, std::string propertyName, std::string whatsThis="") : SimulationControl(className, elementName, propertyName, whatsThis){
+		_getter= getter;
+		_setter = setter;
+		_readonly = setter == nullptr;
+		_propertyType = Util::TypeOf<Util::AllocationType>();
+	}
+public:
+	virtual std::string getValue() const override {
+		int intVal = static_cast<int>(_getter());
+		return std::to_string(intVal);
+	}
+	virtual void setValue(std::string value) override {
+		int intVal = std::stoul(value);
+		_setter(static_cast<Util::AllocationType>(intVal));
+	};
+private:
+	GetterAllocationType _getter;
+	SetterAllocationType _setter;
+};
+
 
 //namespace\\}
