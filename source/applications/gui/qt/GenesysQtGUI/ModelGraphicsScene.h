@@ -41,6 +41,7 @@
 #include "TraitsGUI.h"
 #include "../../../../kernel/simulator/ModelComponent.h"
 #include "../../../../kernel/simulator/Simulator.h"
+#include "../../../../kernel/simulator/PropertyGenesys.h"
 #include "../../../../kernel/simulator/Plugin.h"
 
 class GraphicalModelEvent {
@@ -88,6 +89,7 @@ public:
 	void showGrid();
 	void beginConnection();
 	void setSimulator(Simulator *simulator);
+	void setPropertyEditor(PropertyEditorGenesys *propEditor);
 	void setObjectBeingDragged(QTreeWidgetItem* objectBeingDragged);
 	void setParentWidget(QWidget *parentWidget);
 	unsigned short connectingStep() const;
@@ -128,6 +130,7 @@ private:
 		std::list<QGraphicsLineItem*>* lines = new std::list<QGraphicsLineItem*>();
 	} _grid;
 	Simulator* _simulator = nullptr;
+	PropertyEditorGenesys* _propertyEditor = nullptr;
 	QTreeWidgetItem* _objectBeingDragged = nullptr;
 	QWidget* _parentWidget;
 
@@ -147,4 +150,3 @@ private:
 };
 
 #endif /* MODELGRAPHICSSCENE_H */
-
