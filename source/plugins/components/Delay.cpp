@@ -36,12 +36,24 @@ Util::AllocationType Delay::getAllocation() const {
 }
 
 Delay::Delay(Model* model, std::string name) : ModelComponent(model, Util::TypeOf<Delay>(), name) {
-	_parentModel->getControls()->insert(new SimulationControlString(
+	SimulationControlString* propExpression = new SimulationControlString(
 									std::bind(&Delay::delayExpression, this), std::bind(&Delay::setDelayExpression, this, std::placeholders::_1, Util::TimeUnit::unknown),
-									Util::TypeOf<Delay>(), getName(), "DelayExpression", ""));
-	_parentModel->getControls()->insert(new SimulationControlTimeUnit(
-									std::bind(&Delay::delayTimeUnit, this),	std::bind(&Delay::setDelayTimeUnit,  this,std::placeholders::_1),
-									Util::TypeOf<Delay>(), getName(), "DelayTimeUnit", ""));
+									Util::TypeOf<Delay>(), getName(), "DelayExpression", "");
+	SimulationControlTimeUnit* propUnitTime = new SimulationControlTimeUnit(
+									std::bind(&Delay::delayTimeUnit, this),	std::bind(&Delay::setDelayTimeUnit, this, std::placeholders::_1),
+									Util::TypeOf<Delay>(), getName(), "DelayTimeUnit", "");
+	SimulationControlAllocationType* propAlloc = new SimulationControlAllocationType(
+									std::bind(&Delay::getAllocation, this), std::bind(&Delay::setAllocation,  this, std::placeholders::_1),
+									Util::TypeOf<Delay>(), getName(), "AllocationType", "");
+
+	_parentModel->getControls()->insert(propExpression);
+	_parentModel->getControls()->insert(propUnitTime);
+	_parentModel->getControls()->insert(propAlloc);
+
+	// setting properties
+	_addProperty(propExpression);
+	_addProperty(propUnitTime);
+	_addProperty(propAlloc);
 }
 
 void Delay::setDelay(double delay) {
