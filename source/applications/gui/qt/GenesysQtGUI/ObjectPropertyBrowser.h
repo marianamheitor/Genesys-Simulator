@@ -10,6 +10,7 @@
 #include "QPropertyBrowser/qtvariantproperty.h"
 
 #include "../../../../kernel/simulator/ModelDataDefinition.h"
+#include "../../../../kernel/simulator/PropertyGenesys.h"
 
 class ObjectPropertyBrowser : public QtTreePropertyBrowser
 {
@@ -17,12 +18,14 @@ class ObjectPropertyBrowser : public QtTreePropertyBrowser
 
 public:
     ObjectPropertyBrowser(QWidget* parent);
-    void setActiveObject(QObject *obj, ModelDataDefinition* mdd = nullptr);
+    void setActiveObject(QObject *obj, ModelDataDefinition* mdd = nullptr, PropertyEditorGenesys* peg = nullptr);
 
 private:
 	QtVariantPropertyManager *variantManager;
 	QObject *currentlyConnectedObject = nullptr;
 	QMap<QtProperty *, const char*> propertyMap;
+
+	PropertyEditorGenesys* propertyEditor;
 
 private slots:
 	void valueChanged(QtProperty *property, const QVariant &value);
