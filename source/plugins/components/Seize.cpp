@@ -15,6 +15,7 @@
 #include "../data/Resource.h"
 #include "../../kernel/simulator/Attribute.h"
 #include "../../kernel/simulator/Simulator.h"
+#include "../../kernel/simulator/SimulationControlAndResponse.h"
 #include <assert.h>
 #include <cmath>
 
@@ -33,9 +34,24 @@ ModelDataDefinition* Seize::NewInstance(Model* model, std::string name) {
 
 Seize::Seize(Model* model, std::string name) : ModelComponent(model, Util::TypeOf<Seize>(), name) {
 	// controls and Responses
-	_parentModel->getControls()->insert(new SimulationControlUShort(
-					std::bind(&Seize::getPriority, this), std::bind(&Seize::setPriority, this, std::placeholders::_1),
-					Util::TypeOf<Seize>(), getName(), "Priority", ""));
+	SimulationControlAllocationType* propAlloc = new SimulationControlAllocationType(
+									std::bind(&Seize::getAllocationType, this), std::bind(&Seize::setAllocationType,  this, std::placeholders::_1),
+									Util::TypeOf<Seize>(), getName(), "AllocationType", "");
+	SimulationControlUShort* propPriority = new SimulationControlUShort(
+									std::bind(&Seize::getPriority, this), std::bind(&Seize::setPriority, this, std::placeholders::_1),
+									Util::TypeOf<Seize>(), getName(), "Priority", "");
+	SimulationControlString* propExpression = new SimulationControlString(
+									std::bind(&Seize::getPriorityExpression, this), std::bind(&Seize::setPriorityExpression, this, std::placeholders::_1),
+									Util::TypeOf<Seize>(), getName(), "PriorityExpression", "");
+
+	_parentModel->getControls()->insert(propAlloc);
+	_parentModel->getControls()->insert(propPriority);
+	_parentModel->getControls()->insert(propExpression);
+
+	// setting properties
+	_addProperty(propAlloc);
+	_addProperty(propPriority);
+	_addProperty(propExpression);
 }
 
 // public
