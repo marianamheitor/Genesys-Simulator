@@ -17,6 +17,7 @@
 #include "../../kernel/simulator/Attribute.h"
 #include "../../plugins/data/EntityGroup.h"
 #include "../../plugins/data/Queue.h"
+#include "../../kernel/simulator/SimulationControlAndResponse.h"
 
 #ifdef PLUGINCONNECT_DYNAMIC
 
@@ -97,6 +98,30 @@ std::string Search::getSearchInName() const {
 }
 
 Search::Search(Model* model, std::string name) : ModelComponent(model, Util::TypeOf<Search>(), name) {
+	SimulationControlString* propStart = new SimulationControlString(
+									std::bind(&Search::getStartRank, this), std::bind(&Search::setStartRank, this, std::placeholders::_1),
+									Util::TypeOf<Search>(), getName(), "StartRank", "");
+	SimulationControlString* propEnd = new SimulationControlString(
+									std::bind(&Search::getEndRank, this), std::bind(&Search::setEndRank, this, std::placeholders::_1),
+									Util::TypeOf<Search>(), getName(), "EndRank", "");
+	SimulationControlString* propCondition = new SimulationControlString(
+									std::bind(&Search::getSearchCondition, this), std::bind(&Search::setSearchCondition, this, std::placeholders::_1),
+									Util::TypeOf<Search>(), getName(), "SearchCondition", "");
+	SimulationControlString* propSaveAttribute = new SimulationControlString(
+									std::bind(&Search::getSaveFounRankAttribute, this), std::bind(&Search::setSaveFounRankAttribute, this, std::placeholders::_1),
+									Util::TypeOf<Search>(), getName(), "SaveFounRankAttribute", "");
+
+
+	_parentModel->getControls()->insert(propStart);								
+	_parentModel->getControls()->insert(propEnd);
+	_parentModel->getControls()->insert(propCondition);
+	_parentModel->getControls()->insert(propSaveAttribute);
+
+	// setting properties
+	_addProperty(propStart);
+	_addProperty(propEnd);
+	_addProperty(propCondition);
+	_addProperty(propSaveAttribute);
 }
 
 std::string Search::show() {
@@ -225,5 +250,3 @@ PluginInformation* Search::GetPluginInformation() {
 	// ...  @TODO
 	return info;
 }
-
-
