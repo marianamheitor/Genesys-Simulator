@@ -13,6 +13,7 @@
 
 #include "CppForG.h"
 #include "../../kernel/simulator/Model.h"
+#include "../../kernel/simulator/SimulationControlAndResponse.h"
 
 #include <fstream>
 #include <dlfcn.h>
@@ -31,6 +32,25 @@ ModelDataDefinition* CppForG::NewInstance(Model* model, std::string name) {
 
 CppForG::CppForG(Model* model, std::string name) : ModelComponent(model, Util::TypeOf<CppForG>(), name) {
 	_createInternalAndAttachedData();
+
+	SimulationControlString* propDispatchEvent = new SimulationControlString(
+									std::bind(&CppForG::getOnDispatchEventCode, this), std::bind(&CppForG::setOnDispatchEventCode, this, std::placeholders::_1),
+									Util::TypeOf<CppForG>(), getName(), "OnDispatchEventCode", "");
+	SimulationControlString* propBetweenRep = new SimulationControlString(
+									std::bind(&CppForG::getInitBetweenReplicationCode, this), std::bind(&CppForG::setInitBetweenReplicationCode, this, std::placeholders::_1),
+									Util::TypeOf<CppForG>(), getName(), "InitBetweenReplicationCode", "");
+	SimulationControlString* propIncludes = new SimulationControlString(
+									std::bind(&CppForG::getIncludesCode, this), std::bind(&CppForG::setIncludesCode, this, std::placeholders::_1),
+									Util::TypeOf<CppForG>(), getName(), "IncludesCode", "");
+
+	_parentModel->getControls()->insert(propDispatchEvent);
+	_parentModel->getControls()->insert(propBetweenRep);
+	_parentModel->getControls()->insert(propIncludes);
+
+	// setting properties
+	_addProperty(propDispatchEvent);
+	_addProperty(propBetweenRep);
+	_addProperty(propIncludes);
 }
 
 std::string CppForG::show() {
