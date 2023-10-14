@@ -13,6 +13,7 @@
 
 #include "OLD_ODEelement.h"
 #include "../../kernel/simulator/Model.h"
+#include "../../kernel/simulator/SimulationControlAndResponse.h"
 
 #ifdef PLUGINCONNECT_DYNAMIC
 
@@ -27,6 +28,19 @@ ModelDataDefinition* OLD_ODEelement::NewInstance(Model* model, std::string name)
 
 OLD_ODEelement::OLD_ODEelement(Model* model, std::string name) : ModelDataDefinition(model, Util::TypeOf<OLD_ODEelement>(), name) {
 	//_elems = elems;
+	SimulationControlDouble* propStepH = new SimulationControlDouble(
+									std::bind(&OLD_ODEelement::getStepH, this), std::bind(&OLD_ODEelement::setStepH, this, std::placeholders::_1),
+									Util::TypeOf<OLD_ODEelement>(), getName(), "StepH", "");
+	SimulationControlDouble* endTime = new SimulationControlDouble(
+									std::bind(&OLD_ODEelement::getEndTime, this), std::bind(&OLD_ODEelement::setEndTime, this, std::placeholders::_1),
+									Util::TypeOf<OLD_ODEelement>(), getName(), "EndTime", "");
+
+	_parentModel->getControls()->insert(propStepH);
+	_parentModel->getControls()->insert(endTime);
+
+	// setting properties
+	_addProperty(propStepH);
+	_addProperty(endTime);
 }
 
 std::string OLD_ODEelement::show() {
