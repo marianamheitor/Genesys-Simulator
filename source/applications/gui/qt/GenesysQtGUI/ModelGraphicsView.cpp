@@ -97,6 +97,11 @@ void ModelGraphicsView::setSimulator(Simulator* simulator) {
 	((ModelGraphicsScene*) scene())->setSimulator(simulator);
 }
 
+void ModelGraphicsView::setPropertyEditor(PropertyEditorGenesys* propEditor) {
+	_propertyEditor = propEditor;
+	((ModelGraphicsScene*) scene())->setPropertyEditor(propEditor);
+}
+
 QColor ModelGraphicsView::myrgba(uint64_t color) {
 	uint8_t r, g, b, a;
 	r = (color&0xFF000000)>>24;
@@ -212,4 +217,3 @@ void ModelGraphicsView::selectionChanged() {
 QList<QGraphicsItem *> ModelGraphicsView::selectedItems() {
 	return ((ModelGraphicsScene*) scene())->selectedItems();
 }
-
