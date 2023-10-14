@@ -40,6 +40,7 @@
 #include "ModelGraphicsScene.h"
 #include "../../../../kernel/simulator/ModelComponent.h"
 #include "../../../../kernel/simulator/Simulator.h"
+#include "../../../../kernel/simulator/PropertyGenesys.h"
 #include "../../../../kernel/simulator/Plugin.h"
 
 class ModelGraphicsView : public QGraphicsView {
@@ -64,6 +65,7 @@ public:
 	void beginConnection();
 	void selectModelComponent(ModelComponent* component);
 	void setSimulator(Simulator* simulator);
+	void setPropertyEditor(PropertyEditorGenesys* propEditor);
 	void setEnabled(bool enabled);
 	QList<QGraphicsItem*> selectedItems();
 public: // events and notifications
@@ -117,9 +119,9 @@ private:
 	sceneMouseEventHandlerMethod _sceneMouseEventHandler;
 	sceneGraphicalModelEventHandlerMethod _sceneGraphicalModelEventHandler;
 	Simulator* _simulator = nullptr;
+	PropertyEditorGenesys* _propertyEditor = nullptr;
 	QWidget* _parentWidget;
 	bool _notifyGraphicalModelEventHandlers = true;
 };
 
 #endif /* QMODELGRAPHICVIEW_H */
-
