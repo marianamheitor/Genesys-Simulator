@@ -54,6 +54,8 @@ ModelGraphicsScene::~ModelGraphicsScene() {
 //-----------------------------------------------------------------------
 
 GraphicalModelComponent* ModelGraphicsScene::addGraphicalModelComponent(Plugin* plugin, ModelComponent* component, QPointF position, QColor color) {
+	_propertyEditor->addElement(component);
+
 	GraphicalModelComponent* graphComp = new GraphicalModelComponent(plugin, component, position, color);
 	addItem(graphComp);
 	_graphicalModelComponents->append(graphComp);
@@ -435,6 +437,10 @@ void ModelGraphicsScene::setSimulator(Simulator *simulator) {
 	_simulator = simulator;
 }
 
+void ModelGraphicsScene::setPropertyEditor(PropertyEditorGenesys *propEditor) {
+	_propertyEditor = propEditor;
+}
+
 unsigned short ModelGraphicsScene::connectingStep() const {
 	return _connectingStep;
 }
@@ -463,4 +469,3 @@ QList<GraphicalModelComponent*>* ModelGraphicsScene::graphicalModelMomponentItem
 //------------------------
 // Private
 //------------------------
-
