@@ -14,6 +14,7 @@
 #include "Release.h"
 #include "../../kernel/simulator/Model.h"
 #include "../../kernel/simulator/Simulator.h"
+#include "../../kernel/simulator/SimulationControlAndResponse.h"
 #include "../data/Resource.h"
 //#include "../../kernel/simulator/Attribute.h"
 #include <assert.h>
@@ -31,6 +32,14 @@ ModelDataDefinition* Release::NewInstance(Model* model, std::string name) {
 }
 
 Release::Release(Model* model, std::string name) : ModelComponent(model, Util::TypeOf<Release>(), name) {
+	SimulationControlUInt* propPriority = new SimulationControlUInt(
+									std::bind(&Release::priority, this), std::bind(&Release::setPriority, this, std::placeholders::_1),
+									Util::TypeOf<Release>(), getName(), "Priority", "");
+
+	_parentModel->getControls()->insert(propPriority);
+	
+	// setting properties
+	_addProperty(propPriority);
 }
 
 std::string Release::show() {
