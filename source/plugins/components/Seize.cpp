@@ -34,24 +34,29 @@ ModelDataDefinition* Seize::NewInstance(Model* model, std::string name) {
 
 Seize::Seize(Model* model, std::string name) : ModelComponent(model, Util::TypeOf<Seize>(), name) {
 	// controls and Responses
-	SimulationControlAllocationType* propAlloc = new SimulationControlAllocationType(
+	SimulationControlGenericEnum<Util::AllocationType>* propAlloc = new SimulationControlGenericEnum<Util::AllocationType>(
 									std::bind(&Seize::getAllocationType, this), std::bind(&Seize::setAllocationType,  this, std::placeholders::_1),
 									Util::TypeOf<Seize>(), getName(), "AllocationType", "");
-	SimulationControlUShort* propPriority = new SimulationControlUShort(
+	SimulationControlGeneric<unsigned short>* propPriority = new SimulationControlGeneric<unsigned short>(
 									std::bind(&Seize::getPriority, this), std::bind(&Seize::setPriority, this, std::placeholders::_1),
 									Util::TypeOf<Seize>(), getName(), "Priority", "");
-	SimulationControlString* propExpression = new SimulationControlString(
+	SimulationControlGeneric<std::string>* propExpression = new SimulationControlGeneric<std::string>(
 									std::bind(&Seize::getPriorityExpression, this), std::bind(&Seize::setPriorityExpression, this, std::placeholders::_1),
 									Util::TypeOf<Seize>(), getName(), "PriorityExpression", "");
+	// SimulationControlGeneric<QueueableItem*>* propQueueableItem = new SimulationControlGeneric<QueueableItem*>(
+	// 								std::bind(&Seize::getQueueableItem, this), std::bind(&Seize::setQueueableItem, this, std::placeholders::_1),
+	// 								Util::TypeOf<Seize>(), getName(), "QueueableItem", "");									
 
 	_parentModel->getControls()->insert(propAlloc);
 	_parentModel->getControls()->insert(propPriority);
 	_parentModel->getControls()->insert(propExpression);
+	// _parentModel->getControls()->insert(propQueueableItem);
 
 	// setting properties
 	_addProperty(propAlloc);
 	_addProperty(propPriority);
 	_addProperty(propExpression);
+	// _addProperty(propQueueableItem);
 }
 
 // public
