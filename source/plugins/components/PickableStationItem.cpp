@@ -39,30 +39,6 @@ PickableStationItem::PickableStationItem(Model* model, std::string stationName, 
 		station = model->getParentSimulator()->getPlugins()->newInstance<Station>(model, stationName);
 	}
 	PickableStationItem(dynamic_cast<Station*>(station),expression);
-
-	SimulationControlGeneric<std::string>* propExpression = new SimulationControlGeneric<std::string>(
-									std::bind(&PickableStationItem::getExpression, this), std::bind(&PickableStationItem::setExpression, this, std::placeholders::_1),
-									Util::TypeOf<PickableStationItem>(), getName(), "Expression", "");
-	// SimulationControlGeneric<Queue*>* propQueue = new SimulationControlGeneric<Queue*>(
-	// 								std::bind(&PickableStationItem::getQueue, this), std::bind(&PickableStationItem::setQueue, this, std::placeholders::_1),
-	// 								Util::TypeOf<PickableStationItem>(), getName(), "Queue", "");
-	// SimulationControlGeneric<Resource*>* propResource = new SimulationControlGeneric<Resource*>(
-	// 								std::bind(&PickableStationItem::getResource, this), std::bind(&PickableStationItem::setResource, this, std::placeholders::_1),
-	// 								Util::TypeOf<PickableStationItem>(), getName(), "Resource", "");	
-	// SimulationControlGeneric<Station*>* propStation = new SimulationControlGeneric<Station*>(
-	// 								std::bind(&PickableStationItem::getStation, this), std::bind(&PickableStationItem::setStation, this, std::placeholders::_1),
-	// 								Util::TypeOf<PickableStationItem>(), getName(), "Station", "");																											
-
-	_parentModel->getControls()->insert(propExpression);
-	// _parentModel->getControls()->insert(propQueue);
-	// _parentModel->getControls()->insert(propResource);
-	// _parentModel->getControls()->insert(propStation);
-
-	// setting properties
-	_addProperty(propExpression);
-	// _addProperty(propQueue);
-	// _addProperty(propResource);
-	// _addProperty(propStation);
 }
 
 PickableStationItem::PickableStationItem(Station* station, Queue* queue) {
