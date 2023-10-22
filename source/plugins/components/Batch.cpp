@@ -38,10 +38,11 @@ Batch::Batch(Model* model, std::string name) : ModelComponent(model, Util::TypeO
 				std::bind(&Batch::getGroupedAttributes, this),
 				std::bind(&Batch::setGroupedAttributes, this, std::placeholders::_1),
 				Util::TypeOf<Batch>(), getName(), "GroupedAttributes", "");
-	// SimulationControlGenericEnum<EntityType*>* propGroupedEntity = new SimulationControlGenericEnum<EntityType*>(
-	// 			std::bind(&Batch::getGroupedEntityType, this),
-	// 			std::bind(&Batch::setGroupedEntityType, this, std::placeholders::_1),
-	// 			Util::TypeOf<Batch>(), getName(), "GroupedEntityType", "");
+	SimulationControlGenericClass<EntityType*, Model*, EntityType>* propGroupedEntity = new SimulationControlGenericClass<EntityType*, Model*, EntityType>(
+				_parentModel,
+				std::bind(&Batch::getGroupedEntityType, this),
+				std::bind(&Batch::setGroupedEntityType, this, std::placeholders::_1),
+				Util::TypeOf<Batch>(), getName(), "GroupedEntityType", "");
 	SimulationControlGeneric<std::string>* propAttributeName = new SimulationControlGeneric<std::string>(
 				std::bind(&Batch::getAttributeName, this),
 				std::bind(&Batch::setAttributeName, this, std::placeholders::_1),
@@ -54,14 +55,14 @@ Batch::Batch(Model* model, std::string name) : ModelComponent(model, Util::TypeO
 
 	_parentModel->getControls()->insert(propRule);
 	_parentModel->getControls()->insert(propGroupedAttribs);
-	// _parentModel->getControls()->insert(propGroupedEntity);
+	_parentModel->getControls()->insert(propGroupedEntity);
 	_parentModel->getControls()->insert(propAttributeName);
 	_parentModel->getControls()->insert(propSize);
 
 	// setting properties
 	_addProperty(propRule);
 	_addProperty(propGroupedAttribs);
-	// _addProperty(propGroupedEntity);
+	_addProperty(propGroupedEntity);
 	_addProperty(propAttributeName);
 	_addProperty(propSize);
 }
