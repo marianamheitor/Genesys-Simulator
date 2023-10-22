@@ -32,7 +32,7 @@ ModelDataDefinition* Release::NewInstance(Model* model, std::string name) {
 }
 
 Release::Release(Model* model, std::string name) : ModelComponent(model, Util::TypeOf<Release>(), name) {
-	SimulationControlUInt* propPriority = new SimulationControlUInt(
+	SimulationControlGeneric<unsigned short>* propPriority = new SimulationControlGeneric<unsigned short>(
 									std::bind(&Release::priority, this), std::bind(&Release::setPriority, this, std::placeholders::_1),
 									Util::TypeOf<Release>(), getName(), "Priority", "");
 
