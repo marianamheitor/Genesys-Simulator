@@ -374,7 +374,8 @@ private:
 	SetterGeneric<T> _setter;
 };
 
-template <typename T, typename M>
+// TODO: remove typename C
+template <typename T, typename M, typename C>
 class SimulationControlGenericClass: public SimulationControl {
 public:
 	SimulationControlGenericClass(M model, GetterGeneric<T> getter, SetterGeneric<T> setter, std::string className, std::string elementName, std::string propertyName, std::string whatsThis="") : SimulationControl(className, elementName, propertyName, whatsThis){
@@ -382,7 +383,7 @@ public:
 		_getter= getter;
 		_setter = setter;
 		_readonly = setter == nullptr;
-		_propertyType = Util::TypeOf<T>();
+		_propertyType = Util::TypeOf<C>();
 	}
 public:
 	virtual std::string getValue() const override {
@@ -399,8 +400,23 @@ public:
 	}
 
 	virtual void setValue(std::string value) override {
-		int intVal = std::stoul(value);
-		_setter(static_cast<T>(intVal));
+		// bool exists = false;
+		T newVal;
+
+		// for (auto modeldata : *_model->getDataManager()->getDataDefinitionList(_propertyType)->list()) {
+		// 	if (modeldata->getName() == value) {
+		// 		exists = true;
+		// 		newVal = modeldata;
+		// 		break;
+		// 	};
+		// };
+
+		// if (!exists) {
+			newVal = new C(_model, value);
+		// 	_model->getDataManager()->insert(newVal);
+		// };
+
+		_setter(newVal);
 	};
 
 private:
