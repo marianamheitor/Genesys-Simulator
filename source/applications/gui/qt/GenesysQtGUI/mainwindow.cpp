@@ -889,12 +889,18 @@ void MainWindow::_actualizeModelCppCode() {
 		}
 		code->insert({"4datadef", text});
 
-		text = _addCppCodeLine("// Create model components", tabs);
+		text = _addCppCodeLine("// Create model components and setting properties", tabs);
 		for (ModelComponent* comp : *m->getComponents()->getAllComponents()) {
 			name = comp->getName();
 			if (name.find(".") == std::string::npos) {
 				text += _addCppCodeLine(comp->getClassname() + "* " + name + " = plugins->newInstance<" + comp->getClassname() + ">(model, \"" + name + "\");", tabs);
 			}
+
+			for (auto prop : *comp->getProperties()->list()) {
+				text += _addCppCodeLine("propertyEditor->changeProperty(" + std::to_string(comp->getId()) + ", " + prop->getName() + ", " + prop->getValue() + ");", tabs);
+			};
+
+			text += _addCppCodeLine("", tabs);
 		}
 		code->insert({"5modelcompdef", text});
 
