@@ -27,6 +27,29 @@ ModelDataDefinition* LSODE::NewInstance(Model* model, std::string name) {
 }
 
 LSODE::LSODE(Model* model, std::string name) : ModelComponent(model, Util::TypeOf<LSODE>(), name) {
+	// SimulationControlGeneric<Variable*>* propTimeVariable = new SimulationControlGeneric<Variable*>(
+	// 								std::bind(&LSODE::getTimeVariable, this), std::bind(&LSODE::setTimeVariable, this, std::placeholders::_1),
+	// 								Util::TypeOf<LSODE>(), getName(), "TimeVariable", "");
+	SimulationControlGeneric<double>* propStep = new SimulationControlGeneric<double>(
+									std::bind(&LSODE::getStep, this), std::bind(&LSODE::setStep, this, std::placeholders::_1),
+									Util::TypeOf<LSODE>(), getName(), "Step", "");
+	// SimulationControlGeneric<Variable*>* propVariable = new SimulationControlGeneric<Variable*>(
+	// 								std::bind(&LSODE::getVariable, this), std::bind(&LSODE::setVariable, this, std::placeholders::_1),
+	// 								Util::TypeOf<LSODE>(), getName(), "Variable", "");
+	SimulationControlGeneric<std::string>* propFileName = new SimulationControlGeneric<std::string>(
+									std::bind(&LSODE::getFileName, this), std::bind(&LSODE::setFilename, this, std::placeholders::_1),
+									Util::TypeOf<LSODE>(), getName(), "FileName", "");									
+
+	// _parentModel->getControls()->insert(propTimeVariable);
+	_parentModel->getControls()->insert(propStep);
+	// _parentModel->getControls()->insert(propVariable);
+	_parentModel->getControls()->insert(propFileName);
+
+	// setting properties
+	// _addProperty(propTimeVariable);
+	_addProperty(propStep);
+	// _addProperty(propVariable);
+	_addProperty(propFileName);
 }
 
 std::string LSODE::show() {
