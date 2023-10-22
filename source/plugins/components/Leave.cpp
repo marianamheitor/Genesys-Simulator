@@ -27,14 +27,15 @@ ModelDataDefinition* Leave::NewInstance(Model* model, std::string name) {
 }
 
 Leave::Leave(Model* model, std::string name) : ModelComponent(model, Util::TypeOf<Leave>(), name) {
-	// SimulationControlGeneric<Station*>* propStation = new SimulationControlGeneric<Station*>(
-	// 								std::bind(&Leave::getStation, this), std::bind(&Leave::setStation, this, std::placeholders::_1),
-	// 								Util::TypeOf<Leave>(), getName(), "Station", "");
+	SimulationControlGenericClass<Station*, Model*, Station>* propStation = new SimulationControlGenericClass<Station*, Model*, Station>(
+									_parentModel,
+									std::bind(&Leave::getStation, this), std::bind(&Leave::setStation, this, std::placeholders::_1),
+									Util::TypeOf<Leave>(), getName(), "Station", "");
 
-	// _parentModel->getControls()->insert(propStation);
+	_parentModel->getControls()->insert(propStation);
 
 	// setting properties
-	// _addProperty(propStation);
+	_addProperty(propStation);
 }
 
 std::string Leave::show() {
