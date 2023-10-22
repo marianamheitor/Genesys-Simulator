@@ -30,16 +30,16 @@ ModelDataDefinition* Record::NewInstance(Model* model, std::string name) {
 }
 
 Record::Record(Model* model, std::string name) : ModelComponent(model, Util::TypeOf<Record>(), name) {
-	SimulationControlBool* propTime = new SimulationControlBool(
+	SimulationControlGeneric<bool>* propTime = new SimulationControlGeneric<bool>(
 									std::bind(&Record::getTimeDependent, this), std::bind(&Record::setTimeDependent, this, std::placeholders::_1),
 									Util::TypeOf<Record>(), getName(), "TimeDependent", "");
-	SimulationControlString* propExpression = new SimulationControlString(
+	SimulationControlGeneric<std::string>* propExpression = new SimulationControlGeneric<std::string>(
 									std::bind(&Record::getExpression, this), std::bind(&Record::setExpression, this, std::placeholders::_1),
 									Util::TypeOf<Record>(), getName(), "Expression", "");
-	SimulationControlString* propExpressionName = new SimulationControlString(
+	SimulationControlGeneric<std::string>* propExpressionName = new SimulationControlGeneric<std::string>(
 									std::bind(&Record::getExpressionName, this), std::bind(&Record::setExpressionName, this, std::placeholders::_1),
 									Util::TypeOf<Record>(), getName(), "ExpressionName", "");
-	SimulationControlString* propFilename = new SimulationControlString(
+	SimulationControlGeneric<std::string>* propFilename = new SimulationControlGeneric<std::string>(
 									std::bind(&Record::getFileName, this), std::bind(&Record::setFilename, this, std::placeholders::_1),
 									Util::TypeOf<Record>(), getName(), "Filename", "");
 
