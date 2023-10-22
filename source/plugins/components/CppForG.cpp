@@ -42,20 +42,21 @@ CppForG::CppForG(Model* model, std::string name) : ModelComponent(model, Util::T
 	SimulationControlGeneric<std::string>* propIncludes = new SimulationControlGeneric<std::string>(
 									std::bind(&CppForG::getIncludesCode, this), std::bind(&CppForG::setIncludesCode, this, std::placeholders::_1),
 									Util::TypeOf<CppForG>(), getName(), "IncludesCode", "");
-	// SimulationControlGeneric<CppCompiler*>* propCppCompiler = new SimulationControlGeneric<CppCompiler*>(
-	// 								std::bind(&CppForG::getCppCompiler, this), std::bind(&CppForG::setCppCompiler, this, std::placeholders::_1),
-	// 								Util::TypeOf<CppForG>(), getName(), "CppCompiler", "");
+	SimulationControlGenericClass<CppCompiler*, Model*, CppCompiler>* propCppCompiler = new SimulationControlGenericClass<CppCompiler*, Model*, CppCompiler>(
+									_parentModel,
+									std::bind(&CppForG::getCppCompiler, this), std::bind(&CppForG::setCppCompiler, this, std::placeholders::_1),
+									Util::TypeOf<CppForG>(), getName(), "CppCompiler", "");
 
 	_parentModel->getControls()->insert(propDispatchEvent);
 	_parentModel->getControls()->insert(propBetweenRep);
 	_parentModel->getControls()->insert(propIncludes);
-	// _parentModel->getControls()->insert(propCppCompiler);
+	_parentModel->getControls()->insert(propCppCompiler);
 
 	// setting properties
 	_addProperty(propDispatchEvent);
 	_addProperty(propBetweenRep);
 	_addProperty(propIncludes);
-	// _addProperty(propCppCompiler);
+	_addProperty(propCppCompiler);
 }
 
 std::string CppForG::show() {
