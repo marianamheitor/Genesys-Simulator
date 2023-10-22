@@ -31,9 +31,10 @@ ModelDataDefinition* Route::NewInstance(Model* model, std::string name) {
 }
 
 Route::Route(Model* model, std::string name) : ModelComponent(model, Util::TypeOf<Route>(), name) {
-	// SimulationControlGeneric<Station*>* propStation = new SimulationControlGeneric<Station*>(
-	// 								std::bind(&Route::getStation, this), std::bind(&Route::setStation, this, std::placeholders::_1),
-	// 								Util::TypeOf<Route>(), getName(), "Station", "");
+	SimulationControlGenericClass<Station*, Model*, Station>* propStation = new SimulationControlGenericClass<Station*, Model*, Station>(
+									_parentModel,
+									std::bind(&Route::getStation, this), std::bind(&Route::setStation, this, std::placeholders::_1),
+									Util::TypeOf<Route>(), getName(), "Station", "");
 	SimulationControlGeneric<std::string>* propStationExpression = new SimulationControlGeneric<std::string>(
 									std::bind(&Route::getStationExpression, this), std::bind(&Route::setStationExpression, this, std::placeholders::_1),
 									Util::TypeOf<Route>(), getName(), "StationExpression", "");								
@@ -46,24 +47,25 @@ Route::Route(Model* model, std::string name) : ModelComponent(model, Util::TypeO
 	SimulationControlGenericEnum<Route::DestinationType>* propDestinationType = new SimulationControlGenericEnum<Route::DestinationType>(
 									std::bind(&Route::getRouteDestinationType, this), std::bind(&Route::setRouteDestinationType, this, std::placeholders::_1),
 									Util::TypeOf<Route>(), getName(), "RouteDestinationType", "");	
-	// SimulationControlGeneric<Label*>* propLabel = new SimulationControlGeneric<Label*>(
-	// 								std::bind(&Route::getLabel, this), std::bind(&Route::setLabel, this, std::placeholders::_1),
-	// 								Util::TypeOf<Route>(), getName(), "Label", "");									
+	SimulationControlGenericClass<Label*, Model*, Label>* propLabel = new SimulationControlGenericClass<Label*, Model*, Label>(
+									_parentModel,
+									std::bind(&Route::getLabel, this), std::bind(&Route::setLabel, this, std::placeholders::_1),
+									Util::TypeOf<Route>(), getName(), "Label", "");									
 
-	// _parentModel->getControls()->insert(propStation);
+	_parentModel->getControls()->insert(propStation);
 	_parentModel->getControls()->insert(propStationExpression);
 	// _parentModel->getControls()->insert(propTimeExpression);
 	_parentModel->getControls()->insert(propTimeTimeUnit);
 	_parentModel->getControls()->insert(propDestinationType);
-	// _parentModel->getControls()->insert(propLabel);
+	_parentModel->getControls()->insert(propLabel);
 
 	// setting properties
-	// _addProperty(propStation);
+	_addProperty(propStation);
 	_addProperty(propStationExpression);
 	// _addProperty(propTimeExpression);
 	_addProperty(propTimeTimeUnit);
 	_addProperty(propDestinationType);
-	// _addProperty(propLabel);
+	_addProperty(propLabel);
 }
 
 std::string Route::show() {
