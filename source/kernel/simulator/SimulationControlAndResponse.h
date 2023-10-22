@@ -318,7 +318,7 @@ using SetterGeneric = std::function<void(T)>;
 template <typename T>
 class SimulationControlGeneric: public SimulationControl {
 public:
-	SimulationControlGeneric(GetterAllocationType<T> getter, SetterAllocationType<T> setter, std::string className, std::string elementName, std::string propertyName, std::string whatsThis="") : SimulationControl(className, elementName, propertyName, whatsThis){
+	SimulationControlGeneric(GetterGeneric<T> getter, SetterGeneric<T> setter, std::string className, std::string elementName, std::string propertyName, std::string whatsThis="") : SimulationControl(className, elementName, propertyName, whatsThis){
 		_getter= getter;
 		_setter = setter;
 		_readonly = setter == nullptr;
@@ -328,7 +328,7 @@ public:
 	virtual std::string getValue() const override {
 		T tVal = static_cast<T>(_getter());
 
-		std::strng strVal;
+		std::string strVal;
 		std::ostringstream auxStr;
 		auxStr << tVal;
 		strVal = auxStr.str();
@@ -345,13 +345,14 @@ public:
 	};
 
 private:
-	GetterAllocationType<T> _getter;
-	SetterAllocationType<T> _setter;
+	GetterGeneric<T> _getter;
+	SetterGeneric<T> _setter;
 };
 
+template <typename T>
 class SimulationControlGenericEnum: public SimulationControl {
 public:
-	SimulationControlGenericEnum(GetterAllocationType<T> getter, SetterAllocationType<T> setter, std::string className, std::string elementName, std::string propertyName, std::string whatsThis="") : SimulationControl(className, elementName, propertyName, whatsThis){
+	SimulationControlGenericEnum(GetterGeneric<T> getter, SetterGeneric<T> setter, std::string className, std::string elementName, std::string propertyName, std::string whatsThis="") : SimulationControl(className, elementName, propertyName, whatsThis){
 		_getter= getter;
 		_setter = setter;
 		_readonly = setter == nullptr;
@@ -369,8 +370,43 @@ public:
 	};
 
 private:
-	GetterAllocationType<T> _getter;
-	SetterAllocationType<T> _setter;
+	GetterGeneric<T> _getter;
+	SetterGeneric<T> _setter;
+};
+
+template <typename T, typename M>
+class SimulationControlGenericClass: public SimulationControl {
+public:
+	SimulationControlGenericClass(M model, GetterGeneric<T> getter, SetterGeneric<T> setter, std::string className, std::string elementName, std::string propertyName, std::string whatsThis="") : SimulationControl(className, elementName, propertyName, whatsThis){
+		_model = model;
+		_getter= getter;
+		_setter = setter;
+		_readonly = setter == nullptr;
+		_propertyType = Util::TypeOf<T>();
+	}
+public:
+	virtual std::string getValue() const override {
+		T tVal = static_cast<T>(_getter());
+		std::string strVal;
+
+		if (tVal != nullptr) {
+			strVal = tVal->getName();
+		} else {
+			strVal = "";
+		};
+
+		return strVal;
+	}
+
+	virtual void setValue(std::string value) override {
+		int intVal = std::stoul(value);
+		_setter(static_cast<T>(intVal));
+	};
+
+private:
+	M _model;
+	GetterGeneric<T> _getter;
+	SetterGeneric<T> _setter;
 };
 
 //namespace\\}
