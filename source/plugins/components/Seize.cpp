@@ -43,20 +43,21 @@ Seize::Seize(Model* model, std::string name) : ModelComponent(model, Util::TypeO
 	SimulationControlGeneric<std::string>* propExpression = new SimulationControlGeneric<std::string>(
 									std::bind(&Seize::getPriorityExpression, this), std::bind(&Seize::setPriorityExpression, this, std::placeholders::_1),
 									Util::TypeOf<Seize>(), getName(), "PriorityExpression", "");
-	// SimulationControlGeneric<QueueableItem*>* propQueueableItem = new SimulationControlGeneric<QueueableItem*>(
-	// 								std::bind(&Seize::getQueueableItem, this), std::bind(&Seize::setQueueableItem, this, std::placeholders::_1),
-	// 								Util::TypeOf<Seize>(), getName(), "QueueableItem", "");									
+	SimulationControlGenericClass<QueueableItem*, Model*, QueueableItem>* propQueueableItem = new SimulationControlGenericClass<QueueableItem*, Model*, QueueableItem>(
+									_parentModel,
+									std::bind(&Seize::getQueueableItem, this), std::bind(&Seize::setQueueableItem, this, std::placeholders::_1),
+									Util::TypeOf<Seize>(), getName(), "QueueableItem", "");									
 
 	_parentModel->getControls()->insert(propAlloc);
 	_parentModel->getControls()->insert(propPriority);
 	_parentModel->getControls()->insert(propExpression);
-	// _parentModel->getControls()->insert(propQueueableItem);
+	_parentModel->getControls()->insert(propQueueableItem);
 
 	// setting properties
 	_addProperty(propAlloc);
 	_addProperty(propPriority);
 	_addProperty(propExpression);
-	// _addProperty(propQueueableItem);
+	_addProperty(propQueueableItem);
 }
 
 // public
