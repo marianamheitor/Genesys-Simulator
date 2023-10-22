@@ -33,24 +33,29 @@ ModelDataDefinition* CppForG::NewInstance(Model* model, std::string name) {
 CppForG::CppForG(Model* model, std::string name) : ModelComponent(model, Util::TypeOf<CppForG>(), name) {
 	_createInternalAndAttachedData();
 
-	SimulationControlString* propDispatchEvent = new SimulationControlString(
+	SimulationControlGeneric<string>* propDispatchEvent = new SimulationControlGeneric<string>(
 									std::bind(&CppForG::getOnDispatchEventCode, this), std::bind(&CppForG::setOnDispatchEventCode, this, std::placeholders::_1),
 									Util::TypeOf<CppForG>(), getName(), "OnDispatchEventCode", "");
-	SimulationControlString* propBetweenRep = new SimulationControlString(
+	SimulationControlGeneric<string>* propBetweenRep = new SimulationControlGeneric<string>(
 									std::bind(&CppForG::getInitBetweenReplicationCode, this), std::bind(&CppForG::setInitBetweenReplicationCode, this, std::placeholders::_1),
 									Util::TypeOf<CppForG>(), getName(), "InitBetweenReplicationCode", "");
-	SimulationControlString* propIncludes = new SimulationControlString(
+	SimulationControlGeneric<string>* propIncludes = new SimulationControlGeneric<string>(
 									std::bind(&CppForG::getIncludesCode, this), std::bind(&CppForG::setIncludesCode, this, std::placeholders::_1),
 									Util::TypeOf<CppForG>(), getName(), "IncludesCode", "");
+	// SimulationControlGeneric<CppCompiler*>* propCppCompiler = new SimulationControlGeneric<CppCompiler*>(
+	// 								std::bind(&CppForG::getCppCompiler, this), std::bind(&CppForG::setCppCompiler, this, std::placeholders::_1),
+	// 								Util::TypeOf<CppForG>(), getName(), "CppCompiler", "");
 
 	_parentModel->getControls()->insert(propDispatchEvent);
 	_parentModel->getControls()->insert(propBetweenRep);
 	_parentModel->getControls()->insert(propIncludes);
+	// _parentModel->getControls()->insert(propCppCompiler);
 
 	// setting properties
 	_addProperty(propDispatchEvent);
 	_addProperty(propBetweenRep);
 	_addProperty(propIncludes);
+	// _addProperty(propCppCompiler);
 }
 
 std::string CppForG::show() {
