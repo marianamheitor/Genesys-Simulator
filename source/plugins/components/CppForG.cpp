@@ -33,13 +33,13 @@ ModelDataDefinition* CppForG::NewInstance(Model* model, std::string name) {
 CppForG::CppForG(Model* model, std::string name) : ModelComponent(model, Util::TypeOf<CppForG>(), name) {
 	_createInternalAndAttachedData();
 
-	SimulationControlGeneric<string>* propDispatchEvent = new SimulationControlGeneric<string>(
+	SimulationControlGeneric<std::string>* propDispatchEvent = new SimulationControlGeneric<std::string>(
 									std::bind(&CppForG::getOnDispatchEventCode, this), std::bind(&CppForG::setOnDispatchEventCode, this, std::placeholders::_1),
 									Util::TypeOf<CppForG>(), getName(), "OnDispatchEventCode", "");
-	SimulationControlGeneric<string>* propBetweenRep = new SimulationControlGeneric<string>(
+	SimulationControlGeneric<std::string>* propBetweenRep = new SimulationControlGeneric<std::string>(
 									std::bind(&CppForG::getInitBetweenReplicationCode, this), std::bind(&CppForG::setInitBetweenReplicationCode, this, std::placeholders::_1),
 									Util::TypeOf<CppForG>(), getName(), "InitBetweenReplicationCode", "");
-	SimulationControlGeneric<string>* propIncludes = new SimulationControlGeneric<string>(
+	SimulationControlGeneric<std::string>* propIncludes = new SimulationControlGeneric<std::string>(
 									std::bind(&CppForG::getIncludesCode, this), std::bind(&CppForG::setIncludesCode, this, std::placeholders::_1),
 									Util::TypeOf<CppForG>(), getName(), "IncludesCode", "");
 	// SimulationControlGeneric<CppCompiler*>* propCppCompiler = new SimulationControlGeneric<CppCompiler*>(
