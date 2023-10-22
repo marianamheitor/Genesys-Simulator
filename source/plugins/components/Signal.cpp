@@ -32,7 +32,7 @@ ModelDataDefinition* Signal::NewInstance(Model* model, std::string name) {
 }
 
 Signal::Signal(Model* model, std::string name) : ModelComponent(model, Util::TypeOf<Signal>(), name) {
-	SimulationControlString* propExpression = new SimulationControlString(
+	SimulationControlGeneric<std::string>* propExpression = new SimulationControlGeneric<std::string>(
 									std::bind(&Signal::limitExpression, this), std::bind(&Signal::setLimitExpression, this, std::placeholders::_1),
 									Util::TypeOf<Signal>(), getName(), "LimitExpression", "");
 
