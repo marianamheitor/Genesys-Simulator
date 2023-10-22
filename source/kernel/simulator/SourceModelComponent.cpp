@@ -20,11 +20,11 @@
 SourceModelComponent::SourceModelComponent(Model* model, std::string componentTypename, std::string name) : ModelComponent(model, componentTypename, name) {
 	std::string className = this->getClassname();
 
-	SimulationControlDouble* propFirstCreation = new SimulationControlDouble(
+	SimulationControlGeneric<double>* propFirstCreation = new SimulationControlGeneric<double>(
 				std::bind(&SourceModelComponent::getFirstCreation, this),
 				std::bind(&SourceModelComponent::setFirstCreation, this, std::placeholders::_1),
 				className, name, "FirstCreation", "The instant when the first entity arrives");
-	SimulationControlUInt* propEntitiesPerCreation = new SimulationControlUInt(
+	SimulationControlGeneric<unsigned int>* propEntitiesPerCreation = new SimulationControlGeneric<unsigned int>(
 				std::bind(&SourceModelComponent::getEntitiesPerCreation, this),
 				std::bind(&SourceModelComponent::setEntitiesPerCreation, this, std::placeholders::_1),
 				className, name, "EntitiesPerCreation", "The amount of entities to be created on each arrival");
@@ -32,11 +32,11 @@ SourceModelComponent::SourceModelComponent(Model* model, std::string componentTy
 	// 			std::bind(&SourceModelComponent::getMaxCreations, this),
 	// 			std::bind(&SourceModelComponent::setMaxCreations, this, std::placeholders::_1),
 	// 			className, name, "MaxCreations", "");
-	SimulationControlString* propTimeBetweenCreations = new SimulationControlString(
+	SimulationControlGeneric<std::string>* propTimeBetweenCreations = new SimulationControlGeneric<std::string>(
 				std::bind(&SourceModelComponent::getTimeBetweenCreationsExpression, this),
 				std::bind(&SourceModelComponent::setTimeBetweenCreationsExpression, this, std::placeholders::_1, Util::TimeUnit::unknown),
 				className, name, "TimeBetweenArrivals", "Expression that defines the interval between two consecutive arrivals");
-	SimulationControlTimeUnit* propTimeUnit = new SimulationControlTimeUnit(
+	SimulationControlGenericEnum<Util::TimeUnit>* propTimeUnit = new SimulationControlGenericEnum<Util::TimeUnit>(
 				std::bind(&SourceModelComponent::getTimeUnit, this),
 				std::bind(&SourceModelComponent::setTimeUnit, this, std::placeholders::_1),
 				className, name, "TimeUnit", "The time unit of time between arrivals");
