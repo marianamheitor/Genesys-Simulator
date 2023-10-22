@@ -37,6 +37,16 @@ ModelDataDefinition::ModelDataDefinition(Model* model, std::string thistypename,
 	if (insertIntoModel) {
 		model->insert(this);
 	}
+
+	// make "name" a property of a component
+	SimulationControlGeneric<std::string>* propName = new SimulationControlGeneric<std::string>(
+									std::bind(&ModelDataDefinition::getName, this), std::bind(&ModelDataDefinition::setName, this, std::placeholders::_1),
+									Util::TypeOf<ModelDataDefinition>(), getName(), "Name", "");
+
+	_parentModel->getControls()->insert(propAlloc);
+
+	// setting properties
+	_addProperty(propName);
 }
 
 bool ModelDataDefinition::hasChanged() const {
