@@ -42,11 +42,11 @@ Batch::Batch(Model* model, std::string name) : ModelComponent(model, Util::TypeO
 	// 			std::bind(&Batch::getGroupedEntityType, this),
 	// 			std::bind(&Batch::setGroupedEntityType, this, std::placeholders::_1),
 	// 			Util::TypeOf<Batch>(), getName(), "GroupedEntityType", "");
-	SimulationControlGeneric<string>* propAttributeName = new SimulationControlGeneric<string>(
+	SimulationControlGeneric<std::string>* propAttributeName = new SimulationControlGeneric<std::string>(
 				std::bind(&Batch::getAttributeName, this),
 				std::bind(&Batch::setAttributeName, this, std::placeholders::_1),
 				Util::TypeOf<Batch>(), getName(), "AttributeName", "");
-	SimulationControlGeneric<string>* propSize = new SimulationControlGeneric<string>(
+	SimulationControlGeneric<std::string>* propSize = new SimulationControlGeneric<std::string>(
 				std::bind(&Batch::getBatchSize, this),
 				std::bind(&Batch::setBatchSize, this, std::placeholders::_1),
 				Util::TypeOf<Batch>(), getName(), "BatchSize", "");
