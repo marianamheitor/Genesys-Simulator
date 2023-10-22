@@ -31,7 +31,7 @@ ModelDataDefinition* Clone::NewInstance(Model* model, std::string name) {
 }
 
 Clone::Clone(Model* model, std::string name) : ModelComponent(model, Util::TypeOf<Clone>(), name) {
-	SimulationControlGeneric<string>* propNumClone = new SimulationControlGeneric<string>(
+	SimulationControlGeneric<std::string>* propNumClone = new SimulationControlGeneric<std::string>(
 									std::bind(&Clone::getNumClonesExpression, this), std::bind(&Clone::setNumClonesExpression, this, std::placeholders::_1),
 									Util::TypeOf<Clone>(), getName(), "NumClonesExpression", "");
 
