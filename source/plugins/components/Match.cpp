@@ -29,25 +29,26 @@ ModelDataDefinition* Match::NewInstance(Model* model, std::string name) {
 }
 
 Match::Match(Model* model, std::string name) : ModelComponent(model, Util::TypeOf<Match>(), name) {
-	// SimulationControlString* propRule = new SimulationControlString(
-	// 								std::bind(&Match::MatchExpression, this), std::bind(&Match::setMatchExpression, this, std::placeholders::_1, Util::TimeUnit::unknown),
-	// 								Util::TypeOf<Match>(), getName(), "MatchExpression", "");
-	SimulationControlUInt* propNumberQueues = new SimulationControlUInt(
+	SimulationControlGenericEnum<Match::Rule>* propRule = new SimulationControlGenericEnum<Match::Rule>(
+									std::bind(&Match::getRule, this), std::bind(&Match::setRule, this, std::placeholders::_1),
+									Util::TypeOf<Match>(), getName(), "Rule", "");
+	SimulationControlGeneric<unsigned int>* propNumberQueues = new SimulationControlGeneric<unsigned int>(
 									std::bind(&Match::getNumberOfQueues, this), std::bind(&Match::setNumberOfQueues, this, std::placeholders::_1),
 									Util::TypeOf<Match>(), getName(), "NumberOfQueues", "");
-	SimulationControlString* propMatchSize = new SimulationControlString(
+	SimulationControlGeneric<std::string>* propMatchSize = new SimulationControlGeneric<std::string>(
 									std::bind(&Match::getMatchSize, this), std::bind(&Match::setMatchSize, this, std::placeholders::_1),
 									Util::TypeOf<Match>(), getName(), "MatchSize", "");
-	SimulationControlString* propAttributeName = new SimulationControlString(
+	SimulationControlGeneric<std::string>* propAttributeName = new SimulationControlGeneric<std::string>(
 									std::bind(&Match::getAttributeName, this), std::bind(&Match::setAttributeName, this, std::placeholders::_1),
 									Util::TypeOf<Match>(), getName(), "AttributeName", "");
 
-	// _parentModel->getControls()->insert();
+	_parentModel->getControls()->insert(propRule);
 	_parentModel->getControls()->insert(propNumberQueues);
 	_parentModel->getControls()->insert(propMatchSize);
 	_parentModel->getControls()->insert(propAttributeName);
 
-	// _addProperty();
+	// setting properties
+	_addProperty(propRule);
 	_addProperty(propNumberQueues);
 	_addProperty(propMatchSize);
 	_addProperty(propAttributeName);
