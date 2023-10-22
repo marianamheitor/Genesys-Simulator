@@ -68,21 +68,21 @@ Remove::Remove(Model* model, std::string name) : ModelComponent(model, Util::Typ
 	SimulationControlGeneric<std::string>* propRemoveEnd = new SimulationControlGeneric<std::string>(
 									std::bind(&Remove::getRemoveEndRank, this), std::bind(&Remove::setRemoveEndRank, this, std::placeholders::_1),
 									Util::TypeOf<Remove>(), getName(), "RemoveEndRank", "");
-	SimulationControlGenericEnum<Remove::RemoveFromType>* propRemoveFromType = new SimulationControlGenericEnum<Remove::RemoveFromType>(
+	SimulationControlGenericEnum<Remove::RemoveFromType>* propRemoveType = new SimulationControlGenericEnum<Remove::RemoveFromType>(
 									std::bind(&Remove::getRemoveFromType, this), std::bind(&Remove::setRemoveFromType, this, std::placeholders::_1),
-									Util::TypeOf<Remove>(), getName(), "RemoveFromTypeRank", "");
+									Util::TypeOf<Remove>(), getName(), "RemoveEndRank", "");
 	// SimulationControlGeneric<ModelDataDefinition*>* propRemoveFrom = new SimulationControlGeneric<ModelDataDefinition*>(
 	// 								std::bind(&Remove::getRemoveFrom, this), std::bind(&Remove::setRemoveFrom, this, std::placeholders::_1),
 	// 								Util::TypeOf<Remove>(), getName(), "RemoveFrom", "");								
 
 	
 	// _parentModel->getControls()->insert(propRemoveFrom);
-	_parentModel->getControls()->insert(propRemoveFromType);
+	_parentModel->getControls()->insert(propRemoveType);
 	_parentModel->getControls()->insert(propRemoveStart);
 	_parentModel->getControls()->insert(propRemoveEnd);
 
 	// _addProperty(propRemoveFrom);
-	_addProperty(propRemoveFromType);
+	_addProperty(propRemoveType);
 	_addProperty(propRemoveStart);
 	_addProperty(propRemoveEnd);
 }
