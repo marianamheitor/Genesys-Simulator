@@ -42,10 +42,10 @@ Process::Process(Model* model, std::string name) : ModelComponent(model, Util::T
 	SimulationControlGenericEnum<Util::AllocationType>* propAlloc = new SimulationControlGenericEnum<Util::AllocationType>(
 									std::bind(&Process::getAllocationType, this), std::bind(&Process::setAllocationType, this, std::placeholders::_1),
 									Util::TypeOf<Process>(), getName(), "AllocationType", "");
-	SimulationControlGenericClass<QueueableItem*, Model*, QueueableItem>* propQueueableItem = new SimulationControlGenericClass<QueueableItem*, Model*, QueueableItem>(
-									_parentModel,
-									std::bind(&Process::getQueueableItem, this), std::bind(&Process::setQueueableItem, this, std::placeholders::_1),
-									Util::TypeOf<Process>(), getName(), "QueueableItem", "");
+	// SimulationControlGenericClass<QueueableItem*, Model*, QueueableItem>* propQueueableItem = new SimulationControlGenericClass<QueueableItem*, Model*, QueueableItem>(
+	//								_parentModel,
+	//								std::bind(&Process::getQueueableItem, this), std::bind(&Process::setQueueableItem, this, std::placeholders::_1),
+	//								Util::TypeOf<Process>(), getName(), "QueueableItem", "");
 	// SimulationControlGeneric<std::string>* propdelayExpression = new SimulationControlGeneric<std::string>(
 	// 								std::bind(&Process::delayExpression, this), std::bind(&Process::setDelayExpression, this, std::placeholders::_1),
 	// 								Util::TypeOf<Process>(), getName(), "DelayExpression", "");
@@ -56,7 +56,7 @@ Process::Process(Model* model, std::string name) : ModelComponent(model, Util::T
 	_parentModel->getControls()->insert(propPriority);
 	_parentModel->getControls()->insert(propPriorityExpression);
 	_parentModel->getControls()->insert(propAlloc);
-	_parentModel->getControls()->insert(propQueueableItem);
+	// _parentModel->getControls()->insert(propQueueableItem);
 	// _parentModel->getControls()->insert(propdelayExpression);
 	_parentModel->getControls()->insert(propdelayTimeUnit);
 	
@@ -64,7 +64,7 @@ Process::Process(Model* model, std::string name) : ModelComponent(model, Util::T
 	_addProperty(propPriority);
 	_addProperty(propPriorityExpression);
 	_addProperty(propAlloc);
-	_addProperty(propQueueableItem);
+	// _addProperty(propQueueableItem);
 	// _addProperty(propdelayExpression);
 	_addProperty(propdelayTimeUnit);
 }
