@@ -36,7 +36,7 @@ Util::AllocationType Delay::getAllocation() const {
 }
 
 Delay::Delay(Model* model, std::string name) : ModelComponent(model, Util::TypeOf<Delay>(), name) {
-	SimulationControlGeneric<string>* propExpression = new SimulationControlGeneric<string>(
+	SimulationControlGeneric<std::string>* propExpression = new SimulationControlGeneric<std::string>(
 									std::bind(&Delay::delayExpression, this), std::bind(&Delay::setDelayExpression, this, std::placeholders::_1, Util::TimeUnit::unknown),
 									Util::TypeOf<Delay>(), getName(), "DelayExpression", "");
 	SimulationControlGeneric<double>* propDelay = new SimulationControlGeneric<double>(
