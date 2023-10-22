@@ -30,6 +30,40 @@ ModelDataDefinition* Batch::NewInstance(Model* model, std::string name) {
 }
 
 Batch::Batch(Model* model, std::string name) : ModelComponent(model, Util::TypeOf<Batch>(), name) {
+	SimulationControlGenericEnum<Batch::Rule>* propRule = new SimulationControlGenericEnum<Batch::Rule>(
+				std::bind(&Batch::getRule, this),
+				std::bind(&Batch::setRule, this, std::placeholders::_1),
+				Util::TypeOf<Batch>(), getName(), "Rule", "");
+	SimulationControlGenericEnum<Batch::GroupedAttribs>* propGroupedAttribs = new SimulationControlGenericEnum<Batch::GroupedAttribs>(
+				std::bind(&Batch::getGroupedAttributes, this),
+				std::bind(&Batch::setGroupedAttributes, this, std::placeholders::_1),
+				Util::TypeOf<Batch>(), getName(), "GroupedAttributes", "");
+	// SimulationControlGenericEnum<EntityType*>* propGroupedEntity = new SimulationControlGenericEnum<EntityType*>(
+	// 			std::bind(&Batch::getGroupedEntityType, this),
+	// 			std::bind(&Batch::setGroupedEntityType, this, std::placeholders::_1),
+	// 			Util::TypeOf<Batch>(), getName(), "GroupedEntityType", "");
+	SimulationControlGeneric<string>* propAttributeName = new SimulationControlGeneric<string>(
+				std::bind(&Batch::getAttributeName, this),
+				std::bind(&Batch::setAttributeName, this, std::placeholders::_1),
+				Util::TypeOf<Batch>(), getName(), "AttributeName", "");
+	SimulationControlGeneric<string>* propSize = new SimulationControlGeneric<string>(
+				std::bind(&Batch::getBatchSize, this),
+				std::bind(&Batch::setBatchSize, this, std::placeholders::_1),
+				Util::TypeOf<Batch>(), getName(), "BatchSize", "");
+	
+
+	_parentModel->getControls()->insert(propRule);
+	_parentModel->getControls()->insert(propGroupedAttribs);
+	// _parentModel->getControls()->insert(propGroupedEntity);
+	_parentModel->getControls()->insert(propAttributeName);
+	_parentModel->getControls()->insert(propSize);
+
+	// setting properties
+	_addProperty(propRule);
+	_addProperty(propGroupedAttribs);
+	// _addProperty(propGroupedEntity);
+	_addProperty(propAttributeName);
+	_addProperty(propSize);
 }
 
 std::string Batch::show() {
@@ -282,5 +316,3 @@ PluginInformation * Batch::GetPluginInformation() {
 	info->setDescriptionHelp(help);
 	return info;
 }
-
-
