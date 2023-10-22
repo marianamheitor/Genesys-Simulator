@@ -40,21 +40,22 @@ Buffer::Buffer(Model* model, std::string name) : ModelComponent(model, Util::Typ
 				std::bind(&Buffer::getcapacity, this),
 				std::bind(&Buffer::setCapacity, this, std::placeholders::_1),
 				Util::TypeOf<Buffer>(), getName(), "Capacity", "");
-	// SimulationControlGenericEnum<SignalData*>* propSignal = new SimulationControlGenericEnum<SignalData*>(
-	// 			std::bind(&Buffer::getsignal, this),
-	// 			std::bind(&Buffer::setSignal, this, std::placeholders::_1),
-	// 			Util::TypeOf<Buffer>(), getName(), "Signal", "");
+	SimulationControlGenericClass<SignalData*, Model*, SignalData>* propSignal = new SimulationControlGenericClass<SignalData*, Model*, SignalData>(
+				_parentModel,
+				std::bind(&Buffer::getsignal, this),
+				std::bind(&Buffer::setSignal, this, std::placeholders::_1),
+				Util::TypeOf<Buffer>(), getName(), "Signal", "");
 
 	_parentModel->getControls()->insert(propArrivalRule);
 	_parentModel->getControls()->insert(propAdvanceOn);
 	_parentModel->getControls()->insert(propCapacity);
-	// _parentModel->getControls()->insert(propSignal);
+	_parentModel->getControls()->insert(propSignal);
 
 	// setting properties
 	_addProperty(propArrivalRule);
 	_addProperty(propAdvanceOn);
 	_addProperty(propCapacity);
-	// _addProperty(propSignal);
+	_addProperty(propSignal);
 }
 
 std::string Buffer::show() {
@@ -221,4 +222,3 @@ Entity* Buffer::_advance(Entity* enteringEntity) {
 	_buffer->push_back(enteringEntity);
 	return result;
 }
-
