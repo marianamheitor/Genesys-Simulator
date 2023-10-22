@@ -43,7 +43,7 @@ ModelDataDefinition::ModelDataDefinition(Model* model, std::string thistypename,
 									std::bind(&ModelDataDefinition::getName, this), std::bind(&ModelDataDefinition::setName, this, std::placeholders::_1),
 									Util::TypeOf<ModelDataDefinition>(), getName(), "Name", "");
 
-	_parentModel->getControls()->insert(propAlloc);
+	_parentModel->getControls()->insert(propName);
 
 	// setting properties
 	_addProperty(propName);
