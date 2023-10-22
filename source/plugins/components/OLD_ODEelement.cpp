@@ -28,10 +28,10 @@ ModelDataDefinition* OLD_ODEelement::NewInstance(Model* model, std::string name)
 
 OLD_ODEelement::OLD_ODEelement(Model* model, std::string name) : ModelDataDefinition(model, Util::TypeOf<OLD_ODEelement>(), name) {
 	//_elems = elems;
-	SimulationControlDouble* propStepH = new SimulationControlDouble(
+	SimulationControlGeneric<double>* propStepH = new SimulationControlGeneric<double>(
 									std::bind(&OLD_ODEelement::getStepH, this), std::bind(&OLD_ODEelement::setStepH, this, std::placeholders::_1),
 									Util::TypeOf<OLD_ODEelement>(), getName(), "StepH", "");
-	SimulationControlDouble* endTime = new SimulationControlDouble(
+	SimulationControlGeneric<double>* endTime = new SimulationControlGeneric<double>(
 									std::bind(&OLD_ODEelement::getEndTime, this), std::bind(&OLD_ODEelement::setEndTime, this, std::placeholders::_1),
 									Util::TypeOf<OLD_ODEelement>(), getName(), "EndTime", "");
 
