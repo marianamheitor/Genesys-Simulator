@@ -41,17 +41,18 @@ Wait::Wait(Model* model, std::string name) : ModelComponent(model, Util::TypeOf<
 	SimulationControlGenericEnum<Wait::WaitType>* propWaitType = new SimulationControlGenericEnum<Wait::WaitType>(
 									std::bind(&Wait::getWaitType, this), std::bind(&Wait::setWaitType, this, std::placeholders::_1),
 									Util::TypeOf<Wait>(), getName(), "WaitType", "");
-	// SimulationControlGeneric<Queue*>* propQueue = new SimulationControlGeneric<Queue*>(
-	// 								std::bind(&Wait::getQueue, this), std::bind(&Wait::setQueue, this, std::placeholders::_1),
-	// 								Util::TypeOf<Wait>(), getName(), "Queue", "");																			
+	SimulationControlGenericClass<Queue*, Model*, Queue>* propQueue = new SimulationControlGenericClass<Queue*, Model*, Queue>(
+									_parentModel,
+									std::bind(&Wait::getQueue, this), std::bind(&Wait::setQueue, this, std::placeholders::_1),
+									Util::TypeOf<Wait>(), getName(), "Queue", "");																			
 
-	// _parentModel->getControls()->insert(propQueue);
+	_parentModel->getControls()->insert(propQueue);
 	_parentModel->getControls()->insert(propWaitType);
 	_parentModel->getControls()->insert(propCondition);
 	_parentModel->getControls()->insert(propExpression);
 
 	// setting properties
-	// _addProperty(propQueue);
+	_addProperty(propQueue);
 	_addProperty(propWaitType);
 	_addProperty(propCondition);
 	_addProperty(propExpression);
