@@ -12,6 +12,7 @@ public: // get
     std::list<ModelComponent*> getElements();
 public:
     void changeProperty(std::string id, std::string attribute, std::string value);
+    SimulationControl* findProperty(std::string id, std::string attribute);
     void addElement(ModelComponent* component);
 private: // attributes
     std::list<ModelComponent*> _elements;
