@@ -5,6 +5,7 @@
 #include <functional>
 #include <list>
 #include "../util/Util.h"
+#include "../util/List.h"
 
 //namespace GenesysKernel {
 
@@ -437,7 +438,7 @@ public:
 
 private:
 	M _model;
-	GetterGeneric<T> _getter;
+	GetterGeneric<List<T>*> _getter;
 	AdderGeneric<T> _adder;
 };
 
