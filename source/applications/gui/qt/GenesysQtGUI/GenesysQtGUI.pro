@@ -138,6 +138,7 @@ SOURCES += \
 	ModelGraphicsView.cpp \
 	ObjectPropertyBrowser.cpp \
 	PropertyEditor.cpp \
+	DataComponentProperty.cpp \
 	dialogs/Dialogmodelinformation.cpp \
 	dialogs/dialogBreakpoint.cpp \
 	dialogs/dialogpluginmanager.cpp \
@@ -320,6 +321,7 @@ HEADERS += \
 	ModelGraphicsView.h \
 	ObjectPropertyBrowser.h \
 	PropertyEditor.h \
+	DataComponentProperty.h \
     QPropertyBrowser/qtbuttonpropertybrowser.h \
     QPropertyBrowser/qteditorfactory.h \
     QPropertyBrowser/qtgroupboxpropertybrowser.h \
