@@ -14,6 +14,6 @@ public:
 
 private:
     QWidget* _window;
-}
+};
 
 #endif // DATACOMPONENTPROPERTY_H
