@@ -9,6 +9,8 @@
 #include "QPropertyBrowser/qttreepropertybrowser.h"
 #include "QPropertyBrowser/qtvariantproperty.h"
 
+#include "DataComponentProperty.h"
+
 #include "../../../../kernel/simulator/ModelDataDefinition.h"
 #include "../../../../kernel/simulator/PropertyGenesys.h"
 
@@ -26,6 +28,7 @@ private:
 	QMap<QtProperty *, const char*> propertyMap;
 
 	PropertyEditorGenesys* propertyEditor;
+	DataComponentProperty* propertyList;
 
 private slots:
 	void valueChanged(QtProperty *property, const QVariant &value);
