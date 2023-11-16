@@ -122,7 +122,7 @@ void ObjectPropertyBrowser::valueChanged(QtProperty *property, const QVariant &v
 		SimulationControl* prop = propertyEditor->findProperty(currentlyConnectedObject->objectName().toStdString(), property->propertyName().toStdString());
 
 		if (prop->getIsClass()) {
-			propertyList->open_window();
+			propertyList->open_window(value.toString());
 		};
 
 		propertyEditor->changeProperty(currentlyConnectedObject->objectName().toStdString(), property->propertyName().toStdString(), value.toString().toStdString());
