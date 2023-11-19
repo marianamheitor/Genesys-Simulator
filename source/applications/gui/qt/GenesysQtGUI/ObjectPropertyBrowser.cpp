@@ -11,13 +11,12 @@ ObjectPropertyBrowser::ObjectPropertyBrowser(QWidget* parent) : QtTreePropertyBr
 	this->setHeaderVisible(true);
 	this->setIndentation(10);
 	this->setRootIsDecorated(true);
-
-	propertyList = new DataComponentProperty();
 }
 
-void ObjectPropertyBrowser::setActiveObject(QObject *obj, ModelDataDefinition* mdd, PropertyEditorGenesys* peg) {
+void ObjectPropertyBrowser::setActiveObject(QObject *obj, ModelDataDefinition* mdd, PropertyEditorGenesys* peg, std::map<SimulationControl*, DataComponentProperty*>* dcp) {
 	// TODO : initialize in other part of the code
-	propertyEditor = peg;
+    propertyEditor = peg;
+    propertyList = dcp;
 
 	clear();
 	variantManager->clear();
@@ -121,12 +120,12 @@ void ObjectPropertyBrowser::valueChanged(QtProperty *property, const QVariant &v
 		stdValue.pop_back();
 		SimulationControl* prop = propertyEditor->findProperty(currentlyConnectedObject->objectName().toStdString(), property->propertyName().toStdString());
 
-		if (prop->getIsClass()) {
-			propertyList->open_window(value.toString());
-		};
-
-		propertyEditor->changeProperty(currentlyConnectedObject->objectName().toStdString(), property->propertyName().toStdString(), value.toString().toStdString());
-		currentlyConnectedObject->setProperty(property->propertyName().toStdString().c_str(), value);
+        if (prop->getIsList()) {
+            (*(propertyList))[prop]->open_window();
+        } else {
+            propertyEditor->changeProperty(prop, value.toString().toStdString());
+            currentlyConnectedObject->setProperty(property->propertyName().toStdString().c_str(), value);
+        }
 	}
 
 	objectUpdated();
