@@ -31,16 +31,22 @@ OLD_ODEelement::OLD_ODEelement(Model* model, std::string name) : ModelDataDefini
 	SimulationControlGeneric<double>* propStepH = new SimulationControlGeneric<double>(
 									std::bind(&OLD_ODEelement::getStepH, this), std::bind(&OLD_ODEelement::setStepH, this, std::placeholders::_1),
 									Util::TypeOf<OLD_ODEelement>(), getName(), "StepH", "");
-	SimulationControlGeneric<double>* endTime = new SimulationControlGeneric<double>(
+	SimulationControlGeneric<double>* propEndTime = new SimulationControlGeneric<double>(
 									std::bind(&OLD_ODEelement::getEndTime, this), std::bind(&OLD_ODEelement::setEndTime, this, std::placeholders::_1),
 									Util::TypeOf<OLD_ODEelement>(), getName(), "EndTime", "");
+	SimulationControlGenericListPointer<ODEfunction*, Model*, ODEfunction>* propODEfunctions = new SimulationControlGenericListPointer<ODEfunction*, Model*, ODEfunction> (
+									_parentModel,
+                                    std::bind(&OLD_ODEelement::getODEfunctions, this), std::bind(&OLD_ODEelement::addODEfunction, this, std::placeholders::_1), std::bind(&OLD_ODEelement::removeODEfunction, this, std::placeholders::_1),
+									Util::TypeOf<OLD_ODEelement>(), getName(), "ODEfunctions", "");
 
 	_parentModel->getControls()->insert(propStepH);
-	_parentModel->getControls()->insert(endTime);
+	_parentModel->getControls()->insert(propEndTime);
+	_parentModel->getControls()->insert(propODEfunctions);
 
 	// setting properties
 	_addProperty(propStepH);
-	_addProperty(endTime);
+	_addProperty(propEndTime);
+	_addProperty(propODEfunctions);
 }
 
 std::string OLD_ODEelement::show() {
@@ -75,6 +81,14 @@ double OLD_ODEelement::getEndTime() const {
 
 List<ODEfunction*>* OLD_ODEelement::getODEfunctions() const {
 	return _ODEfunctions;
+}
+
+void OLD_ODEelement::addODEfunction(ODEfunction* newFunction) {
+	_ODEfunctions->insert(newFunction);
+}
+
+void OLD_ODEelement::removeODEfunction(ODEfunction* function) {
+	_ODEfunctions->remove(function);
 }
 
 PluginInformation* OLD_ODEelement::GetPluginInformation() {
