@@ -72,11 +72,11 @@ List<SeizableItem*>* Release::getReleaseRequests() const {
 	return _releaseRequests;
 }
 
-void Process::addReleaseRequests(SeizableItem* newRequest) {
+void Release::addReleaseRequests(SeizableItem* newRequest) {
 	_releaseRequests->insert(newRequest);
 }
 
-void Process::removeReleaseRequests(SeizableItem* request) {
+void Release::removeReleaseRequests(SeizableItem* request) {
 	_releaseRequests->remove(request);
 }
 
