@@ -35,11 +35,17 @@ Release::Release(Model* model, std::string name) : ModelComponent(model, Util::T
 	SimulationControlGeneric<unsigned short>* propPriority = new SimulationControlGeneric<unsigned short>(
 									std::bind(&Release::priority, this), std::bind(&Release::setPriority, this, std::placeholders::_1),
 									Util::TypeOf<Release>(), getName(), "Priority", "");
+	SimulationControlGenericListPointer<SeizableItem*, Model*, SeizableItem>* propReleaseRequests = new SimulationControlGenericListPointer<SeizableItem*, Model*, SeizableItem> (
+									_parentModel,
+                                    std::bind(&Release::getReleaseRequests, this), std::bind(&Release::addReleaseRequests, this, std::placeholders::_1), std::bind(&Release::removeReleaseRequests, this, std::placeholders::_1),
+									Util::TypeOf<Release>(), getName(), "ReleaseRequests", "");	
 
 	_parentModel->getControls()->insert(propPriority);
+	_parentModel->getControls()->insert(propReleaseRequests);
 	
 	// setting properties
 	_addProperty(propPriority);
+	_addProperty(propReleaseRequests);
 }
 
 std::string Release::show() {
@@ -64,6 +70,14 @@ unsigned short Release::priority() const {
 
 List<SeizableItem*>* Release::getReleaseRequests() const {
 	return _releaseRequests;
+}
+
+void Process::addReleaseRequests(SeizableItem* newRequest) {
+	_releaseRequests->insert(newRequest);
+}
+
+void Process::removeReleaseRequests(SeizableItem* request) {
+	_releaseRequests->remove(request);
 }
 
 //void Release::setResource(Resource* _resource) {
