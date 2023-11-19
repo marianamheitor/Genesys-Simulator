@@ -42,31 +42,37 @@ Process::Process(Model* model, std::string name) : ModelComponent(model, Util::T
 	SimulationControlGenericEnum<Util::AllocationType>* propAlloc = new SimulationControlGenericEnum<Util::AllocationType>(
 									std::bind(&Process::getAllocationType, this), std::bind(&Process::setAllocationType, this, std::placeholders::_1),
 									Util::TypeOf<Process>(), getName(), "AllocationType", "");
-	// SimulationControlGenericClass<QueueableItem*, Model*, QueueableItem>* propQueueableItem = new SimulationControlGenericClass<QueueableItem*, Model*, QueueableItem>(
-	//								_parentModel,
-	//								std::bind(&Process::getQueueableItem, this), std::bind(&Process::setQueueableItem, this, std::placeholders::_1),
-	//								Util::TypeOf<Process>(), getName(), "QueueableItem", "");
+	SimulationControlGenericClassNotDC<QueueableItem*, Model*, QueueableItem>* propQueueableItem = new SimulationControlGenericClassNotDC<QueueableItem*, Model*, QueueableItem>(
+									_parentModel,
+									std::bind(&Process::getQueueableItem, this), std::bind(&Process::setQueueableItem, this, std::placeholders::_1),
+									Util::TypeOf<Process>(), getName(), "QueueableItem", "");
 	// SimulationControlGeneric<std::string>* propdelayExpression = new SimulationControlGeneric<std::string>(
 	// 								std::bind(&Process::delayExpression, this), std::bind(&Process::setDelayExpression, this, std::placeholders::_1),
 	// 								Util::TypeOf<Process>(), getName(), "DelayExpression", "");
 	SimulationControlGenericEnum<Util::TimeUnit>* propdelayTimeUnit = new SimulationControlGenericEnum<Util::TimeUnit>(
 									std::bind(&Process::delayTimeUnit, this), std::bind(&Process::setDelayTimeUnit, this, std::placeholders::_1),
-									Util::TypeOf<Process>(), getName(), "DelayTimeUnit", "");									
+									Util::TypeOf<Process>(), getName(), "DelayTimeUnit", "");	
+	SimulationControlGenericListPointer<SeizableItem*, Model*, SeizableItem>* propSeizeRequests = new SimulationControlGenericListPointer<SeizableItem*, Model*, SeizableItem> (
+									_parentModel,
+                                    std::bind(&Process::getSeizeRequests, this), std::bind(&Process::addSeizeRequest, this, std::placeholders::_1), std::bind(&Process::removeSeizeRequest, this, std::placeholders::_1),
+									Util::TypeOf<Process>(), getName(), "SeizeRequests", "");					
 
 	_parentModel->getControls()->insert(propPriority);
 	_parentModel->getControls()->insert(propPriorityExpression);
 	_parentModel->getControls()->insert(propAlloc);
-	// _parentModel->getControls()->insert(propQueueableItem);
+	_parentModel->getControls()->insert(propQueueableItem);
 	// _parentModel->getControls()->insert(propdelayExpression);
 	_parentModel->getControls()->insert(propdelayTimeUnit);
+	_parentModel->getControls()->insert(propSeizeRequests);
 	
 	// setting properties
 	_addProperty(propPriority);
 	_addProperty(propPriorityExpression);
 	_addProperty(propAlloc);
-	// _addProperty(propQueueableItem);
+	_addProperty(propQueueableItem);
 	// _addProperty(propdelayExpression);
 	_addProperty(propdelayTimeUnit);
+	_addProperty(propSeizeRequests);
 }
 
 std::string Process::show() {
@@ -99,6 +105,14 @@ Util::AllocationType Process::getAllocationType() const {
 
 List<SeizableItem*>* Process::getSeizeRequests() const {
 	return _seize->getSeizeRequests();
+}
+
+void Process::addSeizeRequest(SeizableItem* newRequest) {
+	_seize->getSeizeRequests()->insert(newRequest);
+}
+
+void Process::removeSeizeRequest(SeizableItem* request) {
+	_seize->getSeizeRequests()->remove(request);
 }
 
 void Process::setQueueableItem(QueueableItem* _queueableItem) {
