@@ -38,6 +38,7 @@ public:
 	void setIndex(std::string index);
 	std::string getIndex() const;
 	std::string getQueueableName() const;
+    std::string getName() const;
 	void setQueue(Queue* resource);
 	Queue* getQueue() const;
 	void setSet(Set* set);
