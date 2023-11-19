@@ -38,6 +38,7 @@
 #include <QStyle>
 #include <QGraphicsSceneMouseEvent>
 #include "ModelGraphicsScene.h"
+#include "DataComponentProperty.h"
 #include "../../../../kernel/simulator/ModelComponent.h"
 #include "../../../../kernel/simulator/Simulator.h"
 #include "../../../../kernel/simulator/PropertyGenesys.h"
@@ -66,6 +67,7 @@ public:
 	void selectModelComponent(ModelComponent* component);
 	void setSimulator(Simulator* simulator);
 	void setPropertyEditor(PropertyEditorGenesys* propEditor);
+    void setPropertyList(std::map<SimulationControl*, DataComponentProperty*>* propList);
 	void setEnabled(bool enabled);
 	QList<QGraphicsItem*> selectedItems();
 public: // events and notifications
@@ -120,6 +122,7 @@ private:
 	sceneGraphicalModelEventHandlerMethod _sceneGraphicalModelEventHandler;
 	Simulator* _simulator = nullptr;
 	PropertyEditorGenesys* _propertyEditor = nullptr;
+    	std::map<SimulationControl*, DataComponentProperty*>* _propertyList = nullptr;
 	QWidget* _parentWidget;
 	bool _notifyGraphicalModelEventHandlers = true;
 };
