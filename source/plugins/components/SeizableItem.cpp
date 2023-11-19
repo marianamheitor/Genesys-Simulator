@@ -39,6 +39,7 @@ SeizableItem::SeizableItem(Model* model, std::string resourceName, std::string q
 	if (resource == nullptr) {
 		resource = model->getParentSimulator()->getPlugins()->newInstance<Resource>(model, resourceName);
 	}
+    _seizableName = resourceName;
 	SeizableItem(resource, quantityExpression, selectionRule, saveAttribute, index);
 }
 
@@ -170,6 +171,10 @@ std::string SeizableItem::getQuantityExpression() const {
 
 std::string SeizableItem::getResourceName() const {
 	return _seizableName;
+}
+
+std::string SeizableItem::getName() const {
+    return _seizableName;
 }
 
 void SeizableItem::setResource(Resource* resource) {
