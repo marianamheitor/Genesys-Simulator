@@ -20,7 +20,7 @@ class ObjectPropertyBrowser : public QtTreePropertyBrowser
 
 public:
     ObjectPropertyBrowser(QWidget* parent);
-    void setActiveObject(QObject *obj, ModelDataDefinition* mdd = nullptr, PropertyEditorGenesys* peg = nullptr);
+    void setActiveObject(QObject *obj, ModelDataDefinition* mdd = nullptr, PropertyEditorGenesys* peg = nullptr, std::map<SimulationControl*, DataComponentProperty*>* = nullptr);
 
 private:
 	QtVariantPropertyManager *variantManager;
@@ -28,7 +28,7 @@ private:
 	QMap<QtProperty *, const char*> propertyMap;
 
 	PropertyEditorGenesys* propertyEditor;
-	DataComponentProperty* propertyList;
+    std::map<SimulationControl*, DataComponentProperty*>* propertyList;
 
 private slots:
 	void valueChanged(QtProperty *property, const QVariant &value);
