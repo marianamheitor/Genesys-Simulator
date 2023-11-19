@@ -39,6 +39,7 @@
 #include "graphicals/GraphicalModelComponent.h"
 #include "graphicals/GraphicalComponentPort.h"
 #include "TraitsGUI.h"
+#include "DataComponentProperty.h"
 #include "../../../../kernel/simulator/ModelComponent.h"
 #include "../../../../kernel/simulator/Simulator.h"
 #include "../../../../kernel/simulator/PropertyGenesys.h"
@@ -90,6 +91,7 @@ public:
 	void beginConnection();
 	void setSimulator(Simulator *simulator);
 	void setPropertyEditor(PropertyEditorGenesys *propEditor);
+    void setPropertyList(std::map<SimulationControl*, DataComponentProperty*>* propList);
 	void setObjectBeingDragged(QTreeWidgetItem* objectBeingDragged);
 	void setParentWidget(QWidget *parentWidget);
 	unsigned short connectingStep() const;
@@ -131,6 +133,7 @@ private:
 	} _grid;
 	Simulator* _simulator = nullptr;
 	PropertyEditorGenesys* _propertyEditor = nullptr;
+    std::map<SimulationControl*, DataComponentProperty*>* _propertyList = nullptr;
 	QTreeWidgetItem* _objectBeingDragged = nullptr;
 	QWidget* _parentWidget;
 
