@@ -11,7 +11,7 @@ public: // constructor and destructor
 public: // get
     std::list<ModelComponent*> getElements();
 public:
-    void changeProperty(std::string id, std::string attribute, std::string value);
+    void changeProperty(SimulationControl* property, std::string value, bool remove=false);
     SimulationControl* findProperty(std::string id, std::string attribute);
     void addElement(ModelComponent* component);
 private: // attributes
