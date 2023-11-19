@@ -4,11 +4,9 @@ std::list<ModelComponent*> PropertyEditorGenesys::getElements() {
     return _elements;
 }
 
-void PropertyEditorGenesys::changeProperty(std::string id, std::string attribute, std::string value) {
-    SimulationControl* property = findProperty(id, attribute);
-
+void PropertyEditorGenesys::changeProperty(SimulationControl* property, std::string value, bool remove) {
     if (property) {
-        property->setValue(value);
+        property->setValue(value, remove);
     }
 }
 
