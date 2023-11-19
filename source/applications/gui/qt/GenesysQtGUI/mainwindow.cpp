@@ -50,6 +50,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 	}
 
 	propertyGenesys = new PropertyEditorGenesys();
+    propertyList = new std::map<SimulationControl*, DataComponentProperty*>();
 
 	//_insertFakePlugins(); // todo hate this
 
@@ -113,6 +114,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 	ui->graphicsView->setParentWidget(ui->centralwidget);
 	ui->graphicsView->setSimulator(simulator);
 	ui->graphicsView->setPropertyEditor(propertyGenesys);
+    ui->graphicsView->setPropertyList(propertyList);
 	_zoomValue = ui->horizontalSlider_ZoomGraphical->maximum() / 2;
     //
     // set current tabs
@@ -1231,7 +1233,7 @@ void MainWindow::sceneSelectionChanged() {
 			// https://doc.qt.io/archives/qq/qq18-propertybrowser.html
 			// http://qt.nokia.com/products/appdev/add-on-products/catalog/4/Widgets/qtpropertybrowser/
 			// // ui->treeViewPropertyEditor->setModelBlock(gmc->getComponent());
-			ui->treeViewPropertyEditor->setActiveObject(gmc, gmc->getComponent(), propertyGenesys);
+            ui->treeViewPropertyEditor->setActiveObject(gmc, gmc->getComponent(), propertyGenesys, propertyList);
 			return;
         } else { // nothing selected
             ui->treeViewPropertyEditor->clear();
