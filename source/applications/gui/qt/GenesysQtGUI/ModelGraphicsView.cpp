@@ -102,6 +102,12 @@ void ModelGraphicsView::setPropertyEditor(PropertyEditorGenesys* propEditor) {
 	((ModelGraphicsScene*) scene())->setPropertyEditor(propEditor);
 }
 
+void ModelGraphicsView::setPropertyList(std::map<SimulationControl*, DataComponentProperty*>* propList) {
+    _propertyList = propList;
+    ((ModelGraphicsScene*) scene())->setPropertyList(propList);
+}
+
+
 QColor ModelGraphicsView::myrgba(uint64_t color) {
 	uint8_t r, g, b, a;
 	r = (color&0xFF000000)>>24;
