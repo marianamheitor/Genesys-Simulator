@@ -47,6 +47,8 @@ public:
 	void setEndTime(double _endTime);
 	double getEndTime() const;
 	List<ODEfunction*>* getODEfunctions() const;
+	void addODEfunction(ODEfunction* newFunction);
+	void removeODEfunction(ODEfunction* function);
 protected: // must be overriden 
 	virtual bool _loadInstance(PersistenceRecord *fields);
 	virtual void _saveInstance(PersistenceRecord *fields, bool saveDefaultValues);
