@@ -28,7 +28,7 @@ private:
 	QMap<QtProperty *, const char*> propertyMap;
 
 	PropertyEditorGenesys* propertyEditor;
-    std::map<SimulationControl*, DataComponentProperty*>* propertyList;
+    	std::map<SimulationControl*, DataComponentProperty*>* propertyList;
 
 private slots:
 	void valueChanged(QtProperty *property, const QVariant &value);
