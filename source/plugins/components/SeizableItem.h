@@ -51,6 +51,7 @@ public:
 	void setQuantityExpression(std::string quantityExpression);
 	std::string getQuantityExpression() const;
 	std::string getResourceName() const;
+    std::string getName() const;
 	void setResource(Resource* resource);
 	Resource* getResource() const;
 	void setSet(Set* set);
