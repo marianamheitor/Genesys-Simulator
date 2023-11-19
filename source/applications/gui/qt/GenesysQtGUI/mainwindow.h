@@ -6,6 +6,7 @@
 #include <QTreeWidgetItem>
 #include <QGraphicsItem>
 
+#include "DataComponentProperty.h"
 
 #include "../../../../kernel/simulator/Simulator.h"
 #include "../../../../kernel/simulator/PropertyGenesys.h"
@@ -205,6 +206,7 @@ private: // interface and model main elements to join
 	Ui::MainWindow *ui;
 	Simulator* simulator;
 	PropertyEditorGenesys* propertyGenesys;
+    std::map<SimulationControl*, DataComponentProperty*>* propertyList;
 private: // attributes to be saved and loaded withing the graphical model
 	int _zoomValue; // todo should be set for each open graphical model, such as view rect, etc
 private: // misc useful
