@@ -32,6 +32,7 @@ QueueableItem::QueueableItem(Model* model, std::string queueName = "") {
 		_queueOrSet = model->getParentSimulator()->getPlugins()->newInstance<Queue>(model, queueName);
 	}
 	_index = "0";
+    _queueableName = queueName;
 }
 
 bool QueueableItem::loadInstance(PersistenceRecord *fields) {
@@ -78,6 +79,10 @@ std::string QueueableItem::getIndex() const {
 
 std::string QueueableItem::getQueueableName() const {
 	return _queueableName;
+}
+
+std::string QueueableItem::getName() const {
+    return _queueableName;
 }
 
 void QueueableItem::setQueue(Queue* queue) {
