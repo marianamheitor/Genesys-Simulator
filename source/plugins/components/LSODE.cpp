@@ -106,7 +106,7 @@ void LSODE::addDiffEquation(std::string newDiffEquation) {
 	_diffEquations->insert(newDiffEquation);
 }
 
-void LSODE::aremoveDiffEquation(std::string diffEquation) {
+void LSODE::removeDiffEquation(std::string diffEquation) {
 	_diffEquations->remove(diffEquation);
 }
 
