@@ -55,6 +55,11 @@ ModelGraphicsScene::~ModelGraphicsScene() {
 
 GraphicalModelComponent* ModelGraphicsScene::addGraphicalModelComponent(Plugin* plugin, ModelComponent* component, QPointF position, QColor color) {
 	_propertyEditor->addElement(component);
+    for (auto prop : *component->getProperties()->list()) {
+        if (prop->getIsList()) {
+            (*(_propertyList))[prop] = new DataComponentProperty(_propertyEditor, prop);
+        }
+    }
 
 	GraphicalModelComponent* graphComp = new GraphicalModelComponent(plugin, component, position, color);
 	addItem(graphComp);
@@ -439,6 +444,10 @@ void ModelGraphicsScene::setSimulator(Simulator *simulator) {
 
 void ModelGraphicsScene::setPropertyEditor(PropertyEditorGenesys *propEditor) {
 	_propertyEditor = propEditor;
+}
+
+void ModelGraphicsScene::setPropertyList(std::map<SimulationControl*, DataComponentProperty*>* propList) {
+    _propertyList = propList;
 }
 
 unsigned short ModelGraphicsScene::connectingStep() const {
