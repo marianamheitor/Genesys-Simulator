@@ -89,6 +89,8 @@ public:
 	void setSaveAttribute(std::string _saveAttribute);
 	std::string getSaveAttribute() const;
 	List<PickableStationItem*>* getPickableStationItens() const;
+	void addPickableStationItem(PickableStationItem* newItem);
+	void removePickableStationItem(PickableStationItem* item);
 	void setPickConditionExpression(bool _pickConditionExpression);
 	bool isPickConditionExpression() const;
 	void setPickConditionNumberInQueue(bool _pickConditionNumberInQueue);
