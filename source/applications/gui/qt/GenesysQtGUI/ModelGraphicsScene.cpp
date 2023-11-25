@@ -57,7 +57,15 @@ GraphicalModelComponent* ModelGraphicsScene::addGraphicalModelComponent(Plugin* 
 	_propertyEditor->addElement(component);
     for (auto prop : *component->getProperties()->list()) {
         if (prop->getIsList()) {
-            (*(_propertyList))[prop] = new DataComponentProperty(_propertyEditor, prop);
+            (*(_propertyList))[prop] = new DataComponentProperty(_propertyEditor, prop, false);
+        }
+
+        if (prop->getIsClass()) {
+            (*(_propertyEditorUI))[prop] = new DataComponentEditor(_propertyEditor, prop);
+        }
+
+        if (prop->getIsEnum()) {
+            (*(_propertyBox))[prop] = new ComboBoxEnum(_propertyEditor, prop);
         }
     }
 
@@ -448,6 +456,14 @@ void ModelGraphicsScene::setPropertyEditor(PropertyEditorGenesys *propEditor) {
 
 void ModelGraphicsScene::setPropertyList(std::map<SimulationControl*, DataComponentProperty*>* propList) {
     _propertyList = propList;
+}
+
+void ModelGraphicsScene::setPropertyEditorUI(std::map<SimulationControl*, DataComponentEditor*>* propEditorUI) {
+    _propertyEditorUI = propEditorUI;
+}
+
+void ModelGraphicsScene::setComboBox(std::map<SimulationControl*, ComboBoxEnum*>* propCombo) {
+    _propertyBox = propCombo;
 }
 
 unsigned short ModelGraphicsScene::connectingStep() const {
