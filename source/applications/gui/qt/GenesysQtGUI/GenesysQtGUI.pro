@@ -139,6 +139,8 @@ SOURCES += \
 	ObjectPropertyBrowser.cpp \
 	PropertyEditor.cpp \
 	DataComponentProperty.cpp \
+	DataComponentEditor.cpp \
+	ComboBoxEnum.cpp \
 	dialogs/Dialogmodelinformation.cpp \
 	dialogs/dialogBreakpoint.cpp \
 	dialogs/dialogpluginmanager.cpp \
@@ -322,6 +324,8 @@ HEADERS += \
 	ObjectPropertyBrowser.h \
 	PropertyEditor.h \
 	DataComponentProperty.h \
+	DataComponentEditor.h \
+	ComboBoxEnum.h \
     QPropertyBrowser/qtbuttonpropertybrowser.h \
     QPropertyBrowser/qteditorfactory.h \
     QPropertyBrowser/qtgroupboxpropertybrowser.h \
