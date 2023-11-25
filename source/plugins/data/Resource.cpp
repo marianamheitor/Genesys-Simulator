@@ -55,7 +55,6 @@ Resource::Resource(Model* model, std::string name) : ModelDataDefinition(model, 
 //			DefineSetter<Resource, unsigned int>(this, &Resource::setCapacity));
 //	_parentModel->getControls()->insert(prop1);
 //	_addProperty(prop1);
-	_name = name;
 
 	SimulationControlGenericEnum<Resource::ResourceState, Resource>* propResourceState = new SimulationControlGenericEnum<Resource::ResourceState, Resource>(
                 std::bind(&Resource::getResourceState, this),
