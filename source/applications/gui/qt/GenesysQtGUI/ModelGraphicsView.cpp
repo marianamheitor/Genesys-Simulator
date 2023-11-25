@@ -107,6 +107,15 @@ void ModelGraphicsView::setPropertyList(std::map<SimulationControl*, DataCompone
     ((ModelGraphicsScene*) scene())->setPropertyList(propList);
 }
 
+void ModelGraphicsView::setPropertyEditorUI(std::map<SimulationControl*, DataComponentEditor*>* propEditorUI) {
+    _propertyEditorUI = propEditorUI;
+    ((ModelGraphicsScene*) scene())->setPropertyEditorUI(propEditorUI);
+}
+
+void ModelGraphicsView::setComboBox(std::map<SimulationControl*, ComboBoxEnum*>* propBox) {
+    _propertyBox = propBox;
+    ((ModelGraphicsScene*) scene())->setComboBox(propBox);
+}
 
 QColor ModelGraphicsView::myrgba(uint64_t color) {
 	uint8_t r, g, b, a;
