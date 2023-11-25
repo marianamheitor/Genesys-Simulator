@@ -1,17 +1,26 @@
 #include "DataComponentProperty.h"
 
-DataComponentProperty::DataComponentProperty(PropertyEditorGenesys* editor, SimulationControl* property) {
+DataComponentProperty::DataComponentProperty(PropertyEditorGenesys* editor, SimulationControl* property, bool necessaryConfig) {
     _window = new QWidget;
     _view = new QTreeWidget(_window);
     _add = new QPushButton("Add", _window);
     _remove = new QPushButton("Remove", _window);
+    _edit = new QPushButton("Edit", _window);
     _confirmation = new QInputDialog(_window);
 
     _add->move(270,15);
     _remove->move(270,50);
+    _edit->move(270,85);
+
+    _window->setFixedSize(360,200);
+
+    if (necessaryConfig) {
+        config_values(property);
+    }
 
     QObject::connect(_add, &QPushButton::clicked, this, [this, editor, property]{addElement(editor, property);});
     QObject::connect(_remove, &QPushButton::clicked, this, [this, editor, property]{removeElement(editor, property);});
+    QObject::connect(_edit, &QPushButton::clicked, this, [this, editor, property]{editProperty(editor, property);});
 };
 
 DataComponentProperty::~DataComponentProperty() {
@@ -25,6 +34,18 @@ DataComponentProperty::~DataComponentProperty() {
 void DataComponentProperty::open_window() {
     _window->show();
 };
+
+void DataComponentProperty::config_values(SimulationControl* property) {
+    List<std::string>* values = property->getStrValues();
+
+    for (auto value : *values->list()) {
+        // add element
+        QTreeWidgetItem* newItem = new QTreeWidgetItem(_view);
+        _view->addTopLevelItem(newItem);
+
+        newItem->setText(0,QString::fromStdString(value));
+    }
+}
 
 void DataComponentProperty::addElement(PropertyEditorGenesys* editor, SimulationControl* property) {
     // add element
@@ -50,3 +71,15 @@ void DataComponentProperty::removeElement(PropertyEditorGenesys* editor, Simulat
     // change property
     editor->changeProperty(property, itemValue.toStdString(), true);
 };
+
+void DataComponentProperty::editProperty(PropertyEditorGenesys* editor, SimulationControl* property) {
+    if (property->getIsClass()) {
+       int index = _view->currentIndex().row();
+       List<SimulationControl*>* propertiesElement = property->getProperties(index);
+       DataComponentEditor* propertyEditor = new DataComponentEditor(editor, propertiesElement);
+
+       propertyEditor->open_window(propertiesElement);
+
+       // delete propertyEditor;
+    }
+}
