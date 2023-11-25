@@ -62,8 +62,7 @@ private:
 	std::string _destination = "";
 	std::string _expression = "";
 	bool _isAttributeNotVariable = true;
-	ModelDataDefinition* typeDC = nullptr;
-	std::string _typeDC = Util::TypeOf<Attribute>();
+	std::string _typeDC;
 
 	List<PropertyBase*>* _properties = new List<PropertyBase*>();
 };
