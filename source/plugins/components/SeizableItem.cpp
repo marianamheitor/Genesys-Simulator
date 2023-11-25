@@ -17,6 +17,27 @@
 #include "../../kernel/simulator/Simulator.h"
 #include <cassert>
 
+
+std::string SeizableItem::convertEnumToStr(SeizableType type) {
+	switch (static_cast<int> (type)) {
+		case 0: return "RESOURCE";
+		case 1: return "SET";
+	}
+	return "Unknown";
+}
+
+std::string SeizableItem::convertEnumToStr(SelectionRule rule) {
+	switch (static_cast<int> (rule)) {
+		case 0: return "CYCLICAL";
+		case 1: return "RANDOM";
+		case 2: return "SPECIFICMEMBER";
+		case 3: return "LARGESTREMAININGCAPACITY";
+		case 4: return "SMALLESTNUMBERBUSY";
+		case 5: return "PREFEREDORDER";
+	}
+	return "Unknown";
+}
+
 SeizableItem::SeizableItem(ModelDataDefinition* resourceOrSet, std::string quantityExpression, SeizableItem::SelectionRule selectionRule, std::string saveAttribute, std::string index) {
 	SeizableItem::SeizableType resourceType;
 	if (dynamic_cast<Resource*> (resourceOrSet) != nullptr) {
@@ -40,6 +61,60 @@ SeizableItem::SeizableItem(Model* model, std::string resourceName, std::string q
 		resource = model->getParentSimulator()->getPlugins()->newInstance<Resource>(model, resourceName);
 	}
     _seizableName = resourceName;
+
+    SimulationControlGeneric<std::string>* propIndex = new SimulationControlGeneric<std::string>(
+                                    std::bind(&SeizableItem::getIndex, this), std::bind(&SeizableItem::setIndex, this, std::placeholders::_1),
+                                    Util::TypeOf<SeizableItem>(), getName(), "Index", "");
+	SimulationControlGenericEnum<SeizableItem::SelectionRule, SeizableItem>* propRule = new SimulationControlGenericEnum<SeizableItem::SelectionRule, SeizableItem>(
+									std::bind(&SeizableItem::getSelectionRule, this),
+									std::bind(&SeizableItem::setSelectionRule, this, std::placeholders::_1),
+									Util::TypeOf<SeizableItem>(), getName(), "SelectionRule", "");
+	SimulationControlGenericEnum<SeizableItem::SeizableType, SeizableItem>* propType = new SimulationControlGenericEnum<SeizableItem::SeizableType, SeizableItem>(
+									std::bind(&SeizableItem::getSeizableType, this),
+									std::bind(&SeizableItem::setSeizableType, this, std::placeholders::_1),
+									Util::TypeOf<SeizableItem>(), getName(), "SeizableType", "");
+	SimulationControlGeneric<std::string>* propSaveAttribute = new SimulationControlGeneric<std::string>(
+                                    std::bind(&SeizableItem::getSaveAttribute, this), std::bind(&SeizableItem::setSaveAttribute, this, std::placeholders::_1),
+                                    Util::TypeOf<SeizableItem>(), getName(), "SaveAttribute", "");
+	SimulationControlGeneric<std::string>* propQuantityExpression = new SimulationControlGeneric<std::string>(
+                                    std::bind(&SeizableItem::getQuantityExpression, this), std::bind(&SeizableItem::setQuantityExpression, this, std::placeholders::_1),
+                                    Util::TypeOf<SeizableItem>(), getName(), "QuantityExpression", "");
+	SimulationControlGenericClass<Resource*, Model*, Resource>* propResource = new SimulationControlGenericClass<Resource*, Model*, Resource>(
+									model,
+									std::bind(&SeizableItem::getResource, this), std::bind(&SeizableItem::setResource, this, std::placeholders::_1),
+									Util::TypeOf<SeizableItem>(), "", "Resource", "");
+	SimulationControlGenericClass<Set*, Model*, Set>* propSet = new SimulationControlGenericClass<Set*, Model*, Set>(
+									model,
+									std::bind(&SeizableItem::getSet, this), std::bind(&SeizableItem::setSet, this, std::placeholders::_1),
+									Util::TypeOf<SeizableItem>(), "", "Set", "");
+	SimulationControlGeneric<unsigned int>* propLastMemberSeized = new SimulationControlGeneric<unsigned int>(
+                                    std::bind(&SeizableItem::getLastMemberSeized, this), std::bind(&SeizableItem::setLastMemberSeized, this, std::placeholders::_1),
+                                    Util::TypeOf<SeizableItem>(), getName(), "LastMemberSeized", "");
+	SimulationControlGeneric<unsigned int>* propLastPreferedOrder = new SimulationControlGeneric<unsigned int>(
+                                    std::bind(&SeizableItem::getLastPreferedOrder, this), std::bind(&SeizableItem::setLastPreferedOrder, this, std::placeholders::_1),
+                                    Util::TypeOf<SeizableItem>(), getName(), "LastPreferedOrder", "");
+
+    model->getControls()->insert(propIndex);
+	model->getControls()->insert(propRule);
+	model->getControls()->insert(propType);
+	model->getControls()->insert(propSaveAttribute);
+	model->getControls()->insert(propQuantityExpression);
+	model->getControls()->insert(propResource);
+	model->getControls()->insert(propSet);
+	model->getControls()->insert(propLastMemberSeized);
+	model->getControls()->insert(propLastPreferedOrder);
+
+    // setting properties
+    _addProperty(propIndex);
+	_addProperty(propRule);
+	_addProperty(propType);
+	_addProperty(propSaveAttribute);
+	_addProperty(propQuantityExpression);
+	_addProperty(propResource);
+	_addProperty(propSet);
+	_addProperty(propLastMemberSeized);
+	_addProperty(propLastPreferedOrder);
+
 	SeizableItem(resource, quantityExpression, selectionRule, saveAttribute, index);
 }
 
@@ -137,6 +212,14 @@ std::string SeizableItem::show() {
 	return "resourceType=" + std::to_string(static_cast<int> (_seizableType)) + ",resource=\"" + _resourceOrSet->getName() + "\",quantityExpression=\"" + _quantityExpression + "\", selectionRule=" + std::to_string(static_cast<int> (_selectionRule)) + ", _saveAttribute=\"" + _saveAttribute + "\",index=\"" + _index + "\"";
 }
 
+void SeizableItem::_addProperty(PropertyBase* property) {
+    _properties->insert(property);
+}
+
+List<PropertyBase*>* SeizableItem::getProperties() const {
+    return _properties;
+}
+
 void SeizableItem::setIndex(std::string index) {
 	_index = index;
 }
@@ -230,4 +313,3 @@ unsigned int SeizableItem::getLastPreferedOrder() const {
 //void SeizableItem::setComponentManager(ComponentManager* _componentManager) {
 //	_componentManager = _componentManager;
 //}
-
