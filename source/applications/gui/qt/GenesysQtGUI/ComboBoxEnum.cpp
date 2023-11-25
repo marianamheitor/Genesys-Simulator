@@ -5,7 +5,7 @@ ComboBoxEnum::ComboBoxEnum(PropertyEditorGenesys* editor, SimulationControl* pro
     _comboBox = new QComboBox(_window);
 
     configure_options(property);
-    _comboBox->setCurrentIndex(stoi(property->getValue()));
+    _comboBox->setCurrentText(QString::fromStdString(property->getValue()));
 
     _window->setFixedSize(100,25);
 
