@@ -17,6 +17,16 @@
 #include "../../kernel/simulator/Simulator.h"
 #include <cassert>
 
+
+std::string QueueableItem::convertEnumToStr(QueueableType type) {
+	switch (static_cast<int> (type)) {
+		case 0: return "QUEUE";
+		case 1: return "SET";
+		// case 2: return "HOLD";
+	}
+	return "Unknown";
+}
+
 QueueableItem::QueueableItem(ModelDataDefinition* queueOrSet, QueueableItem::QueueableType queueableType, std::string index) {
 	_queueableType = queueableType;
 	_queueOrSet = queueOrSet;
@@ -33,6 +43,33 @@ QueueableItem::QueueableItem(Model* model, std::string queueName = "") {
 	}
 	_index = "0";
     _queueableName = queueName;
+
+    SimulationControlGeneric<std::string>* propIndex = new SimulationControlGeneric<std::string>(
+                                        std::bind(&QueueableItem::getIndex, this), std::bind(&QueueableItem::setIndex, this, std::placeholders::_1),
+                                        Util::TypeOf<QueueableItem>(), getName(), "Index", "");
+	SimulationControlGenericClass<Queue*, Model*, Queue>* propQueue = new SimulationControlGenericClass<Queue*, Model*, Queue>(
+										model,
+										std::bind(&QueueableItem::getQueue, this), std::bind(&QueueableItem::setQueue, this, std::placeholders::_1),
+										Util::TypeOf<QueueableItem>(), "", "Queue", "");
+	SimulationControlGenericClass<Set*, Model*, Set>* propSet = new SimulationControlGenericClass<Set*, Model*, Set>(
+										model,
+										std::bind(&QueueableItem::getSet, this), std::bind(&QueueableItem::setSet, this, std::placeholders::_1),
+										Util::TypeOf<QueueableItem>(), "", "Set", "");
+	SimulationControlGenericEnum<QueueableItem::QueueableType, QueueableItem>* propType = new SimulationControlGenericEnum<QueueableItem::QueueableType, QueueableItem>(
+										std::bind(&QueueableItem::getQueueableType, this),
+										std::bind(&QueueableItem::setQueueableType, this, std::placeholders::_1),
+										Util::TypeOf<QueueableItem>(), getName(), "QueueableType", "");
+
+    model->getControls()->insert(propIndex);
+	model->getControls()->insert(propQueue);
+	model->getControls()->insert(propSet);
+	model->getControls()->insert(propType);
+
+    // setting properties
+    _addProperty(propIndex);
+	_addProperty(propQueue);
+	_addProperty(propSet);
+	_addProperty(propType);
 }
 
 bool QueueableItem::loadInstance(PersistenceRecord *fields) {
@@ -67,6 +104,14 @@ void QueueableItem::saveInstance(PersistenceRecord *fields, bool saveDefaultValu
 
 std::string QueueableItem::show() {
 	return "queueType=" + std::to_string(static_cast<int> (_queueableType)) + ",queue=\"" + _queueOrSet->getName() + "\",index=\"" + _index + "\"";
+}
+
+void QueueableItem::_addProperty(PropertyBase* property) {
+    _properties->insert(property);
+}
+
+List<PropertyBase*>* QueueableItem::getProperties() const {
+    return _properties;
 }
 
 void QueueableItem::setIndex(std::string index) {
