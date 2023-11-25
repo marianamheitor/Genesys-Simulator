@@ -34,19 +34,19 @@ OLD_ODEelement::OLD_ODEelement(Model* model, std::string name) : ModelDataDefini
 	SimulationControlGeneric<double>* propEndTime = new SimulationControlGeneric<double>(
 									std::bind(&OLD_ODEelement::getEndTime, this), std::bind(&OLD_ODEelement::setEndTime, this, std::placeholders::_1),
 									Util::TypeOf<OLD_ODEelement>(), getName(), "EndTime", "");
-	SimulationControlGenericListPointer<ODEfunction*, Model*, ODEfunction>* propODEfunctions = new SimulationControlGenericListPointer<ODEfunction*, Model*, ODEfunction> (
-									_parentModel,
-                                    std::bind(&OLD_ODEelement::getODEfunctions, this), std::bind(&OLD_ODEelement::addODEfunction, this, std::placeholders::_1), std::bind(&OLD_ODEelement::removeODEfunction, this, std::placeholders::_1),
-									Util::TypeOf<OLD_ODEelement>(), getName(), "ODEfunctions", "");
+    // SimulationControlGenericListPointer<ODEfunction*, Model*, ODEfunction>* propODEfunctions = new SimulationControlGenericListPointer<ODEfunction*, Model*, ODEfunction> (
+                                    // _parentModel,
+                                    // std::bind(&OLD_ODEelement::getODEfunctions, this), std::bind(&OLD_ODEelement::addODEfunction, this, std::placeholders::_1), std::bind(&OLD_ODEelement::removeODEfunction, this, std::placeholders::_1),
+                                    // Util::TypeOf<OLD_ODEelement>(), getName(), "ODEfunctions", "");
 
 	_parentModel->getControls()->insert(propStepH);
 	_parentModel->getControls()->insert(propEndTime);
-	_parentModel->getControls()->insert(propODEfunctions);
+    // _parentModel->getControls()->insert(propODEfunctions);
 
 	// setting properties
 	_addProperty(propStepH);
 	_addProperty(propEndTime);
-	_addProperty(propODEfunctions);
+    // _addProperty(propODEfunctions);
 }
 
 std::string OLD_ODEelement::show() {
