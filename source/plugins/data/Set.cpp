@@ -32,8 +32,8 @@ Set::Set(Model* model, std::string name) : ModelDataDefinition(model, Util::Type
 				Util::TypeOf<Set>(), getName(), "SetOfType", "");
 	SimulationControlGenericListPointer<ModelDataDefinition*, Model*, ModelDataDefinition>* propElementSet = new SimulationControlGenericListPointer<ModelDataDefinition*, Model*, ModelDataDefinition> (
 				_parentModel,
-				std::bind(&Process::getElementSet, this), std::bind(&Process::addElementSet, this, std::placeholders::_1), std::bind(&Process::removeElementSet, this, std::placeholders::_1),
-				Util::TypeOf<Process>(), getName(), "ElementSet", "");					
+				std::bind(&Set::getElementSet, this), std::bind(&Set::addElementSet, this, std::placeholders::_1), std::bind(&Set::removeElementSet, this, std::placeholders::_1),
+				Util::TypeOf<Set>(), getName(), "ElementSet", "");					
 }
 
 std::string Set::show() {
