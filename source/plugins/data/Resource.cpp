@@ -27,6 +27,17 @@ ModelDataDefinition* Resource::NewInstance(Model* model, std::string name) {
 	return new Resource(model, name);
 }
 
+std::string Resource::convertEnumToStr(ResourceState state) {
+	switch (static_cast<int> (state)) {
+		case 0: return "IDLE";
+		case 1: return "BUSY";
+		case 2: return "FAILED";
+		case 3: return "INACTIVE";
+		case 4: return "OTHER";
+	}
+	return "Unknown";
+}
+
 Resource::Resource(Model* model, std::string name) : ModelDataDefinition(model, Util::TypeOf<Resource>(), name) {
 	_resourceEventHandlers->setSortFunc([](const SortedResourceEventHandler* a, const SortedResourceEventHandler * b) {
 		return a->second < b->second; /// Handlers are sorted by priority
@@ -44,6 +55,48 @@ Resource::Resource(Model* model, std::string name) : ModelDataDefinition(model, 
 //			DefineSetter<Resource, unsigned int>(this, &Resource::setCapacity));
 //	_parentModel->getControls()->insert(prop1);
 //	_addProperty(prop1);
+	_name = name;
+
+	SimulationControlGenericEnum<Resource::ResourceState, Resource>* propResourceState = new SimulationControlGenericEnum<Resource::ResourceState, Resource>(
+                std::bind(&Resource::getResourceState, this),
+                std::bind(&Resource::setResourceState, this, std::placeholders::_1),
+                Util::TypeOf<Resource>(), getName(), "ResourceState", "");
+	SimulationControlGeneric<unsigned int>* propCapacity = new SimulationControlGeneric<unsigned int>(
+				std::bind(&Resource::getCapacity, this),
+				std::bind(&Resource::setCapacity, this, std::placeholders::_1),
+				Util::TypeOf<Resource>(), getName(), "Capacity", "");
+	SimulationControlGeneric<double>* propCostBusyTimeUnit = new SimulationControlGeneric<double>(
+				std::bind(&Resource::getCostBusyTimeUnit, this),
+				std::bind(&Resource::setCostBusyTimeUnit, this, std::placeholders::_1),
+				Util::TypeOf<Resource>(), getName(), "CostBusyTimeUnit", "");
+	SimulationControlGeneric<double>* propCostIdleTimeUnit = new SimulationControlGeneric<double>(
+				std::bind(&Resource::getCostIdleTimeUnit, this),
+				std::bind(&Resource::setCostIdleTimeUnit, this, std::placeholders::_1),
+				Util::TypeOf<Resource>(), getName(), "CostIdleTimeUnit", "");
+	SimulationControlGeneric<double>* propCostPerUse = new SimulationControlGeneric<double>(
+				std::bind(&Resource::getCostPerUse, this),
+				std::bind(&Resource::setCostPerUse, this, std::placeholders::_1),
+				Util::TypeOf<Resource>(), getName(), "CostPerUse", "");
+	SimulationControlGenericClass<Schedule*, Model*, Schedule>* propCapacitySchedule = new SimulationControlGenericClass<Schedule*, Model*, Schedule>(
+				_parentModel,
+				std::bind(&Resource::getCapacitySchedule, this),
+				std::bind(&Resource::setCapacitySchedule, this, std::placeholders::_1),
+				Util::TypeOf<Resource>(), getName(), "CapacitySchedule", "");
+
+	_parentModel->getControls()->insert(propResourceState);
+	_parentModel->getControls()->insert(propCapacity);
+	_parentModel->getControls()->insert(propCostBusyTimeUnit);
+	_parentModel->getControls()->insert(propCostIdleTimeUnit);
+	_parentModel->getControls()->insert(propCostPerUse);
+	_parentModel->getControls()->insert(propCapacitySchedule);
+
+	// setting property
+	_addProperty(propResourceState);
+	_addProperty(propCapacity);
+	_addProperty(propCostBusyTimeUnit);
+	_addProperty(propCostIdleTimeUnit);
+	_addProperty(propCostPerUse);
+	_addProperty(propCapacitySchedule);
 }
 
 std::string Resource::show() {
