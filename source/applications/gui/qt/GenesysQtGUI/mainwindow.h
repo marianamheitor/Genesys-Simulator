@@ -7,6 +7,8 @@
 #include <QGraphicsItem>
 
 #include "DataComponentProperty.h"
+#include "DataComponentEditor.h"
+#include "ComboBoxEnum.h"
 
 #include "../../../../kernel/simulator/Simulator.h"
 #include "../../../../kernel/simulator/PropertyGenesys.h"
@@ -207,17 +209,19 @@ private: // interface and model main elements to join
 	Simulator* simulator;
 	PropertyEditorGenesys* propertyGenesys;
     std::map<SimulationControl*, DataComponentProperty*>* propertyList;
+    std::map<SimulationControl*, DataComponentEditor*>* propertyEditorUI;
+    std::map<SimulationControl*, ComboBoxEnum*>* propertyBox;
 private: // attributes to be saved and loaded withing the graphical model
 	int _zoomValue; // todo should be set for each open graphical model, such as view rect, etc
 private: // misc useful
 	bool _textModelHasChanged = false;
 	bool _graphicalModelHasChanged = false;
 	bool _modelWasOpened = false;
-	QString _autoLoadPluginsFilename = "autoloadplugins.txt";
+    QString _autoLoadPluginsFilename = "autoloadplugins.txt";
 	QString _modelfilename;
 	std::map<std::string /*category*/,QColor>* _pluginCategoryColor = new std::map<std::string,QColor>();
 	QColor myrgba(uint64_t color); // TODO: Should NOT be here, but in UtilGUI.h, but then it generates multiple definitions error
-	static std::string dotColor(uint64_t color); // TODO: Should NOT be here, but in UtilGUI.h, but then it generates multiple definitions error
+    static std::string dotColor(uint64_t color); // TODO: Should NOT be here, but in UtilGUI.h, but then it generates multiple definitions error
 
 	const struct TABINDEXES_STRUC {
 		const int TabCentralModelIndex = 0;
