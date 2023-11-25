@@ -26,6 +26,14 @@ ModelDataDefinition* Set::NewInstance(Model* model, std::string name) {
 }
 
 Set::Set(Model* model, std::string name) : ModelDataDefinition(model, Util::TypeOf<Set>(), name) {
+	SimulationControlGeneric<std::string>* propSetOfType = new SimulationControlGeneric<std::string>(
+				std::bind(&Set::getSetOfType, this),
+				std::bind(&Set::setSetOfType, this, std::placeholders::_1),
+				Util::TypeOf<Set>(), getName(), "SetOfType", "");
+	SimulationControlGenericListPointer<ModelDataDefinition*, Model*, ModelDataDefinition>* propElementSet = new SimulationControlGenericListPointer<ModelDataDefinition*, Model*, ModelDataDefinition> (
+				_parentModel,
+				std::bind(&Process::getElementSet, this), std::bind(&Process::addElementSet, this, std::placeholders::_1), std::bind(&Process::removeElementSet, this, std::placeholders::_1),
+				Util::TypeOf<Process>(), getName(), "ElementSet", "");					
 }
 
 std::string Set::show() {
@@ -43,6 +51,14 @@ std::string Set::getSetOfType() const {
 
 List<ModelDataDefinition*>* Set::getElementSet() const {
 	return _elementSet;
+}
+
+void Set::addElementSet(ModelDataDefinition* newElement) {
+	_elementSet->insert(newElement);
+}
+
+void Set::removeElementSet(ModelDataDefinition* element) {
+	_elementSet->remove(element);
 }
 
 PluginInformation* Set::GetPluginInformation() {
