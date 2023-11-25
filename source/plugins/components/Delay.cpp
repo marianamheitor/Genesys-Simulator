@@ -42,23 +42,23 @@ Delay::Delay(Model* model, std::string name) : ModelComponent(model, Util::TypeO
 	SimulationControlGeneric<double>* propDelay = new SimulationControlGeneric<double>(
 									std::bind(&Delay::delay, this), std::bind(&Delay::setDelay, this, std::placeholders::_1),
 									Util::TypeOf<Delay>(), getName(), "Delay", "");
-	SimulationControlGenericEnum<Util::TimeUnit>* propUnitTime = new SimulationControlGenericEnum<Util::TimeUnit>(
+    SimulationControlGenericEnum<Util::TimeUnit, Util>* propUnitTime = new SimulationControlGenericEnum<Util::TimeUnit, Util>(
 									std::bind(&Delay::delayTimeUnit, this),	std::bind(&Delay::setDelayTimeUnit, this, std::placeholders::_1),
 									Util::TypeOf<Delay>(), getName(), "DelayTimeUnit", "");
-	SimulationControlGenericEnum<Util::AllocationType>* propAlloc = new SimulationControlGenericEnum<Util::AllocationType>(
-									std::bind(&Delay::getAllocation, this), std::bind(&Delay::setAllocation,  this, std::placeholders::_1),
-									Util::TypeOf<Delay>(), getName(), "AllocationType", "");
+    SimulationControlGenericEnum<Util::AllocationType, Util>* propAlloc = new SimulationControlGenericEnum<Util::AllocationType, Util>(
+                                    std::bind(&Delay::getAllocation, this), std::bind(&Delay::setAllocation,  this, std::placeholders::_1),
+                                    Util::TypeOf<Delay>(), getName(), "AllocationType", "");
 
 	_parentModel->getControls()->insert(propExpression);
 	_parentModel->getControls()->insert(propDelay);
 	_parentModel->getControls()->insert(propUnitTime);
-	_parentModel->getControls()->insert(propAlloc);
+    _parentModel->getControls()->insert(propAlloc);
 
 	// setting properties
 	_addProperty(propExpression);
 	_addProperty(propDelay);
 	_addProperty(propUnitTime);
-	_addProperty(propAlloc);
+    _addProperty(propAlloc);
 }
 
 void Delay::setDelay(double delay) {
