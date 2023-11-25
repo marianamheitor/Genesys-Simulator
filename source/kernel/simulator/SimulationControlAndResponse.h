@@ -417,7 +417,6 @@ public:
 
     virtual void setValue(std::string value, bool remove=false) override {
 		bool exists = false;
-		value.pop_back();
 		T newVal;
 
         for (auto modeldata : *_model->getDataManager()->getDataDefinitionList(_propertyType)->list()) {
@@ -478,7 +477,6 @@ public:
     }
 
     virtual void setValue(std::string value, bool remove=false) override {
-        value.pop_back();
         T newVal;
 
         newVal = new C(_model, value);
