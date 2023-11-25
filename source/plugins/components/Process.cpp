@@ -39,9 +39,9 @@ Process::Process(Model* model, std::string name) : ModelComponent(model, Util::T
 	SimulationControlGeneric<std::string>* propPriorityExpression = new SimulationControlGeneric<std::string>(
 									std::bind(&Process::getPriorityExpression, this), std::bind(&Process::setPriorityExpression, this, std::placeholders::_1),
 									Util::TypeOf<Process>(), getName(), "PriorityExpression", "");
-	SimulationControlGenericEnum<Util::AllocationType>* propAlloc = new SimulationControlGenericEnum<Util::AllocationType>(
-									std::bind(&Process::getAllocationType, this), std::bind(&Process::setAllocationType, this, std::placeholders::_1),
-									Util::TypeOf<Process>(), getName(), "AllocationType", "");
+    SimulationControlGenericEnum<Util::AllocationType, Util>* propAlloc = new SimulationControlGenericEnum<Util::AllocationType, Util>(
+                                    std::bind(&Process::getAllocationType, this), std::bind(&Process::setAllocationType, this, std::placeholders::_1),
+                                    Util::TypeOf<Process>(), getName(), "AllocationType", "");
 	SimulationControlGenericClassNotDC<QueueableItem*, Model*, QueueableItem>* propQueueableItem = new SimulationControlGenericClassNotDC<QueueableItem*, Model*, QueueableItem>(
 									_parentModel,
 									std::bind(&Process::getQueueableItem, this), std::bind(&Process::setQueueableItem, this, std::placeholders::_1),
@@ -49,7 +49,7 @@ Process::Process(Model* model, std::string name) : ModelComponent(model, Util::T
 	// SimulationControlGeneric<std::string>* propdelayExpression = new SimulationControlGeneric<std::string>(
 	// 								std::bind(&Process::delayExpression, this), std::bind(&Process::setDelayExpression, this, std::placeholders::_1),
 	// 								Util::TypeOf<Process>(), getName(), "DelayExpression", "");
-	SimulationControlGenericEnum<Util::TimeUnit>* propdelayTimeUnit = new SimulationControlGenericEnum<Util::TimeUnit>(
+    SimulationControlGenericEnum<Util::TimeUnit, Util>* propdelayTimeUnit = new SimulationControlGenericEnum<Util::TimeUnit, Util>(
 									std::bind(&Process::delayTimeUnit, this), std::bind(&Process::setDelayTimeUnit, this, std::placeholders::_1),
 									Util::TypeOf<Process>(), getName(), "DelayTimeUnit", "");	
 	SimulationControlGenericListPointer<SeizableItem*, Model*, SeizableItem>* propSeizeRequests = new SimulationControlGenericListPointer<SeizableItem*, Model*, SeizableItem> (
@@ -59,7 +59,7 @@ Process::Process(Model* model, std::string name) : ModelComponent(model, Util::T
 
 	_parentModel->getControls()->insert(propPriority);
 	_parentModel->getControls()->insert(propPriorityExpression);
-	_parentModel->getControls()->insert(propAlloc);
+    _parentModel->getControls()->insert(propAlloc);
 	_parentModel->getControls()->insert(propQueueableItem);
 	// _parentModel->getControls()->insert(propdelayExpression);
 	_parentModel->getControls()->insert(propdelayTimeUnit);
@@ -68,7 +68,7 @@ Process::Process(Model* model, std::string name) : ModelComponent(model, Util::T
 	// setting properties
 	_addProperty(propPriority);
 	_addProperty(propPriorityExpression);
-	_addProperty(propAlloc);
+    _addProperty(propAlloc);
 	_addProperty(propQueueableItem);
 	// _addProperty(propdelayExpression);
 	_addProperty(propdelayTimeUnit);
