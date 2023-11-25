@@ -51,6 +51,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
 	propertyGenesys = new PropertyEditorGenesys();
     propertyList = new std::map<SimulationControl*, DataComponentProperty*>();
+    propertyEditorUI = new std::map<SimulationControl*, DataComponentEditor*>();
+    propertyBox = new std::map<SimulationControl*, ComboBoxEnum*>();
 
 	//_insertFakePlugins(); // todo hate this
 
@@ -115,6 +117,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 	ui->graphicsView->setSimulator(simulator);
 	ui->graphicsView->setPropertyEditor(propertyGenesys);
     ui->graphicsView->setPropertyList(propertyList);
+    ui->graphicsView->setPropertyEditorUI(propertyEditorUI);
+    ui->graphicsView->setComboBox(propertyBox);
 	_zoomValue = ui->horizontalSlider_ZoomGraphical->maximum() / 2;
     //
     // set current tabs
@@ -899,7 +903,9 @@ void MainWindow::_actualizeModelCppCode() {
 			}
 
 			for (auto prop : *comp->getProperties()->list()) {
-				text += _addCppCodeLine("propertyEditor->changeProperty(" + std::to_string(comp->getId()) + ", " + prop->getName() + ", " + prop->getValue() + ");", tabs);
+				// Fazer um loop até encontrar propriedade não alterável?
+				text += _addCppCodeLine("SimulationControl* property = propertyEditor->findProperty(" + std::to_string(comp->getId()) + ", " + prop->getName() + ");", tabs);
+				text += _addCppCodeLine("propertyEditor->changeProperty(property, " + prop->getValue() + ", false);", tabs);
 			};
 
 			text += _addCppCodeLine("", tabs);
@@ -1233,7 +1239,7 @@ void MainWindow::sceneSelectionChanged() {
 			// https://doc.qt.io/archives/qq/qq18-propertybrowser.html
 			// http://qt.nokia.com/products/appdev/add-on-products/catalog/4/Widgets/qtpropertybrowser/
 			// // ui->treeViewPropertyEditor->setModelBlock(gmc->getComponent());
-            ui->treeViewPropertyEditor->setActiveObject(gmc, gmc->getComponent(), propertyGenesys, propertyList);
+            ui->treeViewPropertyEditor->setActiveObject(gmc, gmc->getComponent(), propertyGenesys, propertyList, propertyEditorUI, propertyBox);
 			return;
         } else { // nothing selected
             ui->treeViewPropertyEditor->clear();
