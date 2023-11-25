@@ -1,4 +1,5 @@
 #include "DataComponentEditor.h"
+#include "ComboBoxEnum.h"
 
 DataComponentEditor::DataComponentEditor(PropertyEditorGenesys* editor, SimulationControl* property) {
     _window = new QWidget;
