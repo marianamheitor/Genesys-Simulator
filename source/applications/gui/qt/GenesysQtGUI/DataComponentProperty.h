@@ -10,6 +10,7 @@
 #include <QInputDialog>
 
 #include "DataComponentEditor.h"
+#include "ComboBoxEnum.h"
 
 #include "../../../../kernel/simulator/PropertyGenesys.h"
 
@@ -22,6 +23,7 @@ public:
 public:
     void open_window();
     void config_values(SimulationControl* property);
+    bool isInList(SimulationControl* property, std::string value);
 
 private Q_SLOTS:
     void addElement(PropertyEditorGenesys* editor, SimulationControl* property);
