@@ -404,19 +404,20 @@ public:
 public:
 	virtual std::string getValue() const override {
 		T tVal = static_cast<T>(_getter());
-		std::string strVal;
+        std::string strVal;
 
-		if (tVal != nullptr) {
-			strVal = tVal->getName();
-		} else {
+        if (tVal != nullptr) {
+            strVal = tVal->getName();
+        } else {
 			strVal = "";
-		};
+        };
 
 		return strVal;
 	}
 
     virtual void setValue(std::string value, bool remove=false) override {
 		bool exists = false;
+        // value.pop_back();
 		T newVal;
 
         for (auto modeldata : *_model->getDataManager()->getDataDefinitionList(_propertyType)->list()) {
@@ -477,8 +478,11 @@ public:
     }
 
     virtual void setValue(std::string value, bool remove=false) override {
+        bool exists = false;
+        // value.pop_back();
         T newVal;
 
+        // TODO: criar apenas se já não estiver definido?
         newVal = new C(_model, value);
 
         _setter(newVal);
@@ -529,7 +533,17 @@ public:
         if (remove) {
             _remover(newVal);
         } else {
-            _adder(newVal);
+            bool exists = false;
+            for (auto element : *getStrValues()->list()) {
+                if (value == element) {
+                    exists = true;
+                    break;
+                }
+            }
+
+            if (!exists) {
+                _adder(newVal);
+            }
         }
     };
 
@@ -581,7 +595,17 @@ public:
         if (remove) {
             _remover(newVal);
         } else {
-            _adder(newVal);
+            bool exists = false;
+            for (auto element : *getStrValues()->list()) {
+                if (value == element) {
+                    exists = true;
+                    break;
+                }
+            }
+
+            if (!exists) {
+                _adder(newVal);
+            }
         }
     };
 
