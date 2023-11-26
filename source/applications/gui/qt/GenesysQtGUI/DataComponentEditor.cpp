@@ -1,5 +1,4 @@
 #include "DataComponentEditor.h"
-#include "ComboBoxEnum.h"
 
 DataComponentEditor::DataComponentEditor(PropertyEditorGenesys* editor, SimulationControl* property) {
     _window = new QWidget;
@@ -8,6 +7,7 @@ DataComponentEditor::DataComponentEditor(PropertyEditorGenesys* editor, Simulati
     _newValue = new QInputDialog(_window);
 
     _view->setColumnCount(2);
+    _view->setHeaderLabels({"Property","Value"});
     _edit->move(270,15);
 
     _window->setFixedSize(360,200);
@@ -32,7 +32,7 @@ DataComponentEditor::DataComponentEditor(PropertyEditorGenesys* editor, List<Sim
 DataComponentEditor::~DataComponentEditor() {
     delete _window;
     delete _view;
-    // delete _newValue;
+    delete _newValue;
 };
 
 void DataComponentEditor::open_window(SimulationControl* property) {
@@ -85,7 +85,6 @@ void DataComponentEditor::editProperty(PropertyEditorGenesys* editor, Simulation
         if (index == _view->currentIndex().row()) {
             if (prop->getIsList()) {
                 DataComponentProperty* newList = new DataComponentProperty(editor, prop, true);
-
                 newList->open_window();
             } else if (prop->getIsEnum()) {
                     ComboBoxEnum* box = new ComboBoxEnum(editor, prop);
@@ -94,7 +93,7 @@ void DataComponentEditor::editProperty(PropertyEditorGenesys* editor, Simulation
                         DataComponentEditor* newClass = new DataComponentEditor(editor, prop);
                         newClass->open_window(prop);
                     } else {
-                        QString valueToChange = _newValue->getText(_newValue, "Item", "Enter the name:");
+                        QString valueToChange = _newValue->getText(_newValue, "Item", "Enter the value:");
                         currentItem->setText(1,valueToChange);
 
                         editor->changeProperty(prop, valueToChange.toStdString(), false);
@@ -123,7 +122,7 @@ void DataComponentEditor::editProperty(PropertyEditorGenesys* editor, List<Simul
                     DataComponentEditor* newClass = new DataComponentEditor(editor, prop);
                     newClass->open_window(prop);
                 } else {
-                    QString valueToChange = _newValue->getText(_newValue, "Item", "Enter the name:");
+                    QString valueToChange = _newValue->getText(_newValue, "Item", "Enter the value:");
                     currentItem->setText(1,valueToChange);
 
                     editor->changeProperty(prop, valueToChange.toStdString(), false);
