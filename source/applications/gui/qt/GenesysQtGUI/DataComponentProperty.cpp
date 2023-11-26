@@ -12,6 +12,7 @@ DataComponentProperty::DataComponentProperty(PropertyEditorGenesys* editor, Simu
     _remove->move(270,50);
     _edit->move(270,85);
 
+    _view->setHeaderLabels({"Element"});
     _window->setFixedSize(360,200);
 
     if (necessaryConfig) {
@@ -47,16 +48,26 @@ void DataComponentProperty::config_values(SimulationControl* property) {
     }
 }
 
+bool DataComponentProperty::isInList(SimulationControl* property, std::string value) {
+    for (auto element : *property->getStrValues()->list()) {
+        if (value == element) {
+            return true;
+        }
+    }
+    return false;
+}
+
 void DataComponentProperty::addElement(PropertyEditorGenesys* editor, SimulationControl* property) {
-    // add element
-    QTreeWidgetItem* newItem = new QTreeWidgetItem(_view);
-    _view->addTopLevelItem(newItem);
+    QString newValue = _confirmation->getText(_confirmation, "Item", "Enter the value:");
+    if (!isInList(property, newValue.toStdString())) {
+        // add element
+        QTreeWidgetItem* newItem = new QTreeWidgetItem(_view);
+        _view->addTopLevelItem(newItem);
+        newItem->setText(0,newValue);
 
-    QString newValue = _confirmation->getText(_confirmation, "Item", "Enter the name:");
-    newItem->setText(0,newValue);
-
-    // change property
-    editor->changeProperty(property, newValue.toStdString(), false);
+        // change property
+        editor->changeProperty(property, newValue.toStdString(), false);
+    }
 };
 
 void DataComponentProperty::removeElement(PropertyEditorGenesys* editor, SimulationControl* property) {
@@ -74,12 +85,12 @@ void DataComponentProperty::removeElement(PropertyEditorGenesys* editor, Simulat
 
 void DataComponentProperty::editProperty(PropertyEditorGenesys* editor, SimulationControl* property) {
     if (property->getIsClass()) {
-       int index = _view->currentIndex().row();
-       List<SimulationControl*>* propertiesElement = property->getProperties(index);
-       DataComponentEditor* propertyEditor = new DataComponentEditor(editor, propertiesElement);
+        int index = _view->currentIndex().row();
+        List<SimulationControl*>* propertiesElement = property->getProperties(index);
+        DataComponentEditor* propertyEditor = new DataComponentEditor(editor, propertiesElement);
 
-       propertyEditor->open_window(propertiesElement);
+        propertyEditor->open_window(propertiesElement);
 
-       // delete propertyEditor;
+        // delete propertyEditor;
     }
 }
