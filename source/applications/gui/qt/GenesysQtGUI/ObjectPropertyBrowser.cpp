@@ -10,7 +10,7 @@ ObjectPropertyBrowser::ObjectPropertyBrowser(QWidget* parent) : QtTreePropertyBr
 	this->setAccessibleDescription("Editor for model elements");
 	this->setHeaderVisible(true);
 	this->setIndentation(10);
-	this->setRootIsDecorated(true);
+    this->setRootIsDecorated(true);
 }
 
 void ObjectPropertyBrowser::setActiveObject(QObject *obj, ModelDataDefinition* mdd, PropertyEditorGenesys* peg, std::map<SimulationControl*, DataComponentProperty*>* dcp, std::map<SimulationControl*, DataComponentEditor*>* dce, std::map<SimulationControl*, ComboBoxEnum*>* pb) {
@@ -112,7 +112,7 @@ void ObjectPropertyBrowser::setActiveObject(QObject *obj, ModelDataDefinition* m
 		}
 	}
 
-	*/
+    */
 
 	// connect(obj, SIGNAL(propertyChanged()), this, SLOT(objectUpdated()));
 	objectUpdated();
@@ -120,7 +120,7 @@ void ObjectPropertyBrowser::setActiveObject(QObject *obj, ModelDataDefinition* m
 
 void ObjectPropertyBrowser::valueChanged(QtProperty *property, const QVariant &value)
 {
-	std::string stdValue = value.toString().toStdString();
+    std::string stdValue = value.toString().toStdString();
 
 	if (stdValue.back() == ' ') {
 		stdValue.pop_back();
@@ -131,7 +131,7 @@ void ObjectPropertyBrowser::valueChanged(QtProperty *property, const QVariant &v
         } else { if (prop->getIsEnum()) {
                     (*(propertyBox))[prop]->open_box();
             } else {
-                    propertyEditor->changeProperty(prop, value.toString().toStdString());
+                    propertyEditor->changeProperty(prop, stdValue);
                     currentlyConnectedObject->setProperty(property->propertyName().toStdString().c_str(), value);
 
                     if (prop->getIsClass()) {
@@ -152,5 +152,5 @@ void ObjectPropertyBrowser::objectUpdated()
 		i.next();
 		variantManager->setValue(i.key(), currentlyConnectedObject->property(i.value()));
 	}
-	connect(variantManager, SIGNAL(valueChanged(QtProperty*, QVariant)), this, SLOT(valueChanged(QtProperty*, QVariant)));
+    connect(variantManager, SIGNAL(valueChanged(QtProperty*, QVariant)), this, SLOT(valueChanged(QtProperty*, QVariant)));
 }
